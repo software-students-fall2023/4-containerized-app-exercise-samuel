@@ -1,0 +1,5 @@
+cffi==1.15.1
+numpy==1.23.5
+opencv-python==4.6.0.66
+pycparser==2.21
+sounddevice==0.4.5
