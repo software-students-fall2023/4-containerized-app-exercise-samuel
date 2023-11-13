@@ -38,9 +38,12 @@ docker run --name mongodb -d -p 27017:27017 mongo
 
 The machine learning client will be written in Python and will connect to the database using [pymongo](https://pymongo.readthedocs.io/en/stable/).
 
-- The client device must collect data using one or more available hardware sensors, such as camera, microphone, gps, or any additional sensors the development team has access to.
+- This part of the system is not visible to end-users, so does not involve a user interface... use the web app part for that.
+- The machine learning may be invoked by the interface of the web app part, or may invoke itself automatically based on external events, such as on a predetermined time-based schedule, or both.
+- The client device must collect data gathered from one or more available hardware sensors, such as camera, microphone, gps, or any additional sensors the development team has access to.
 - The client device must do some form of high-level analysis of the data, such as image recognition, speech recognition, classification, aggregation, etc, either using custom code, third-party APIs or code libraries designed for this purpose. In other words, the client device must not only collect raw data, but also must compute the results of some additional analysis of that data.
 - Metadata about the collected data, including the results of any analysis performed, must be saved to the database. How frequently the client communicates with the database must make sense for your application.
+- The code must be formatted in accordance with [PEP 8](https://www.python.org/dev/peps/pep-0008/) using the [black](https://black.readthedocs.io/en/stable/) formatter and [pylint](https://pylint.org/) linter to ensure correctness.
 - Unit tests using [pytest](https://docs.pytest.org/en/7.2.x/) must be written for the client device code that provide at least 50% code coverage of the client code.
 - The client must have a Continuous Integration (CI) workflow using [GitHub Actions](https://github.com/features/actions) that automatically builds and tests the updated client subsystem every time a pull request is approved and code is merged into the `main` branch.
 - Like the other parts, the machine learning client must run within its own Docker container.
@@ -53,6 +56,7 @@ The web app allows visitors on the web to view the activity of the machine learn
 The web app must be built using the Python [flask](https://palletsprojects.com/p/flask/) framework and will connect to the database via `pymongo`, with any additional modules or libraries that you would like.
 
 - The server must store the data received in a database and provide a web dashboard for users to visualize the data.
+- The code must also be formatted in accordance with `PEP 8` using the `black` formatter and `pylint` linter to ensure correctness.
 - Unit tests using `pytest`and [pytest-flask](https://pytest-flask.readthedocs.io/en/latest/) must be written for the web app code that provide at least 80% code coverage of the server code.
 - The web app must have a Continuous Integration / **Continuous Deployment** (CI/**CD**) workflow using [GitHub Actions](https://github.com/features/actions) that automatically builds, tests, and deploys the updated server subsystem every time a pull request is approved and code is merged into the `main` branch.
 - Like the other parts, the web app must run within its own Docker container.
@@ -69,7 +73,7 @@ ALl teams must use task boards to provide insight into the status of all work.
 - The task boards must have at least 4 columns: "To Do", "In Progress", "Awaiting Review", "Done".
 - Teams must represent all work to be done as discrete tasks on the task board, where each task represents about one day's work for one team member.
 - Each task must be assigned to the developer(s) responsible for implementing it.
-- Each task must be positioned on the board in the appropriate column representing its status.
+- Each task must be positioned on the board in the appropriate column representing its current status at all times.
 
 ### Standup meetings
 
