@@ -9,10 +9,9 @@ import sys
 sys.path.append('../')
 from database import db
 
+#print(sys.path)
 
 
-
-print(sys.path)
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
@@ -23,7 +22,6 @@ if os.getenv("FLASK_ENV", "development") == "development":
 @app.route("/")
 def hello():
     user = db.users()
-    
     return "hello" + user['name'] 
 
 
