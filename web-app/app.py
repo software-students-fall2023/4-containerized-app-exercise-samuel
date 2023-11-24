@@ -1,4 +1,13 @@
-from flask import Flask
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    abort,
+    url_for,
+    make_response,
+    session,
+)
 import pymongo
 from pymongo import MongoClient
 import os
@@ -20,10 +29,18 @@ if os.getenv("FLASK_ENV", "development") == "development":
 
 
 @app.route("/")
-def hello():
-    user = db.users()
-    return "hello" + user['name'] 
+def hello(): 
+    return render_template("victory.html")
 
+@app.route("/victory", methods=["GET"])
+def victory(): 
+    return render_template("victory.html")
 
+@app.route("/thumbsUp", methods=["GET"])
+def thumbsUp(): 
+    return render_template("thumbsUp.html")
 
+@app.route("/thumbsDown", methods=["GET"])
+def thumbsDown(): 
+    return render_template("thumbsDown.html")
 

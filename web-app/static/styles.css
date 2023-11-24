@@ -1,0 +1,61 @@
+
+/* Churchill Styles */
+body.pageOne{
+    background-color: #B5C9C3;  
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#chImgBox{
+    margin: auto;
+   
+}
+
+#chImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+}
+
+/* Jesus Styles */
+body.pageTwo{
+    background-color: #CAB1BD;  
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#jsBox{
+    margin: auto;
+   
+}
+
+#jsImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
+/* Devil Styles */
+body.pageThree{
+    background-color: #C3B5B9;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#dvBox{
+    margin: auto;
+   
+}
+
+#dvImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
