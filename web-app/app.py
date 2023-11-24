@@ -44,3 +44,11 @@ def thumbsUp():
 def thumbsDown(): 
     return render_template("thumbsDown.html")
 
+@app.route("/stop", methods=["GET"])
+def stop(): 
+    return render_template("stop.html")
+
+@app.route("/rock", methods=["GET"])
+def rock(): 
+    return render_template("rock.html")
+
