@@ -30,7 +30,7 @@ if os.getenv("FLASK_ENV", "development") == "development":
 
 @app.route("/")
 def hello(): 
-    return render_template("victory.html")
+    return render_template("welcome.html")
 
 @app.route("/victory", methods=["GET"])
 def victory(): 
