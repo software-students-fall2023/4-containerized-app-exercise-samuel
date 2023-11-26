@@ -16,7 +16,6 @@ app.secret_key = os.urandom(24)
 if os.getenv("FLASK_ENV", "development") == "development":
     app.debug = True
 
-
 @app.route("/")
 def hello():
     """
