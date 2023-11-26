@@ -9,6 +9,9 @@ black = "*"
 tomli = "*"
 typing-extensions = "*"
 dill = "*"
+numpy = "*"
+mediapipe = "*"
+tensorflow = "*"
 
 [dev-packages]
 
