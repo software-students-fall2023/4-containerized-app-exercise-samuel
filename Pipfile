@@ -12,6 +12,7 @@ dill = "*"
 numpy = "*"
 mediapipe = "*"
 tensorflow = "*"
+flask = "*"
 
 [dev-packages]
 

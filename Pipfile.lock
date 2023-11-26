@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3b8192dc6f17d129c04aa55d1c9065d62798484b452f11f8f182ed96a8634a39"
+            "sha256": "39b91ac1b22e5023e434f7c04ba311714a71d91c9384bcc4dfb3625d5c960508"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -71,6 +71,14 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==23.11.0"
+        },
+        "blinker": {
+            "hashes": [
+                "sha256:c3f865d4d54db7abc53758a01601cf343fe55b84c1de4e3fa910e420b438d5b9",
+                "sha256:e6820ff6fa4e4d1d8e2747c2283749c3f547e4fee112b98555cdcdae32996182"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==1.7.0"
         },
         "cachetools": {
             "hashes": [
@@ -317,6 +325,15 @@
             "markers": "python_version >= '3.7'",
             "version": "==0.3.7"
         },
+        "flask": {
+            "hashes": [
+                "sha256:21128f47e4e3b9d597a3e8521a329bf56909b690fcc3fa3e477725aa81367638",
+                "sha256:cfadcdb638b609361d29ec22360d6070a77d7463dcb3ab08d2c2f2f168845f58"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==3.0.0"
+        },
         "flatbuffers": {
             "hashes": [
                 "sha256:9ea1144cac05ce5d86e2859f431c6cd5e66cd9c78c558317c7955fb8d4c78d89",
@@ -510,6 +527,22 @@
             ],
             "markers": "python_full_version >= '3.8.0'",
             "version": "==5.12.0"
+        },
+        "itsdangerous": {
+            "hashes": [
+                "sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44",
+                "sha256:5dbbc68b317e5e42f327f9021763545dc3fc3bfe22e6deb96aaf1fc38874156a"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==2.1.2"
+        },
+        "jinja2": {
+            "hashes": [
+                "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852",
+                "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==3.1.2"
         },
         "keras": {
             "hashes": [
