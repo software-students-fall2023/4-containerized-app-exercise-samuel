@@ -1,0 +1,118 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Churchill Styles */
+body.pageOne{
+    background-color: #885A89;  
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#chImgBox{
+    margin: auto;
+   
+}
+
+#chImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+}
+
+/* Jesus Styles */
+body.pageTwo{
+    background-color: #BCD4DE ;  
+     display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#jsBox{
+    margin: auto;
+   
+}
+
+#jsImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
+/* Devil Styles */
+body.pageThree{
+    background-color: #7B2642;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#dvBox{
+    margin: auto;
+   
+}
+
+#dvImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
+/*Rock Styles */
+body.pageFour{
+    background-color: #EE7B30;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#rockBox{
+    margin: auto;
+   
+}
+
+#rockImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
+/*Snail Styles*/
+body.pageFive{
+    background-color: #4A4E69;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#snailBox{
+    margin: auto;
+   
+}
+
+#snailImg{
+    border-radius: 10px; 
+    border: 3px solid white;
+} 
+
+/* Welcome Styles */
+body.pageSix{
+    background-color: #81B29A;  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0; 
+}
+
+#welcomeBox{
+    margin: auto;
+}
+
