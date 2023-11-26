@@ -1,13 +1,16 @@
 absl-py==2.0.0
 astunparse==1.6.3
 attrs==23.1.0
+blinker==1.7.0
 cachetools==5.3.2
 certifi==2023.11.17
 cffi==1.16.0
 charset-normalizer==3.3.2
+click==8.1.7
 contourpy==1.2.0
 cv==1.0.0
 cycler==0.12.1
+Flask==3.0.0
 flatbuffers==23.5.26
 fonttools==4.45.1
 gast==0.5.4
@@ -17,6 +20,8 @@ google-pasta==0.2.0
 grpcio==1.59.3
 h5py==3.10.0
 idna==3.6
+itsdangerous==2.1.2
+Jinja2==3.1.2
 keras==2.15.0
 kiwisolver==1.4.5
 libclang==16.0.6
@@ -27,6 +32,7 @@ mediapipe==0.10.8
 ml-dtypes==0.2.0
 numpy==1.26.2
 oauthlib==3.2.2
+opencv-contrib-python==4.8.1.78
 opencv-python==4.8.1.78
 opt-einsum==3.3.0
 packaging==23.2
@@ -49,6 +55,7 @@ tensorflow-estimator==2.15.0
 tensorflow-io-gcs-filesystem==0.34.0
 tensorflow-macos==2.15.0
 termcolor==2.3.0
+tomli==2.0.1
 typing_extensions==4.8.0
 urllib3==2.1.0
 Werkzeug==3.0.1
