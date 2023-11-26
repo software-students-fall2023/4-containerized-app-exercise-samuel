@@ -1,15 +1,59 @@
-from flask import Flask
-from pymongo import MongoClient
+"""
+Does a thing. 
+"""
+
+import os
+import sys
+from flask import (
+    Flask,
+    render_template,
+)
+sys.path.append('../')
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
-client = MongoClient('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1')
+if os.getenv("FLASK_ENV", "development") == "development":
+    app.debug = True
 
-@app.route('/')
-def home():
-    print("This message will be printed to the console.")
-    return 'Hello, World!'
+@app.route("/")
+def hello():
+    """
+    Does a thing. 
+    """
+    return render_template("welcome.html")
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
-    
+@app.route("/victory", methods=["GET"])
+def victory():
+    """
+    Does a thing. 
+    """
+    return render_template("victory.html")
+
+@app.route("/thumbsUp", methods=["GET"])
+def thumbs_up():
+    """
+    Does a thing. 
+    """
+    return render_template("thumbsUp.html")
+
+@app.route("/thumbsDown", methods=["GET"])
+def thumbs_down():
+    """
+    Does a thing. 
+    """
+    return render_template("thumbsDown.html")
+
+@app.route("/stop", methods=["GET"])
+def stop():
+    """
+    Does a thing. 
+    """
+    return render_template("stop.html")
+
+@app.route("/rock", methods=["GET"])
+def rock():
+    """
+    Does a thing. 
+    """
+    return render_template("rock.html")
