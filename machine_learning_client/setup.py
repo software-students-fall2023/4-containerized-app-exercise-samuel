@@ -22,7 +22,9 @@ mpDraw = mp.solutions.drawing_utils
 model = tf.keras.models.load_model("machine-learning-client/mp_hand_gesture")
 
 # Load class names
-with open("machine-learning-client/mp_hand_gesture/gesture.names", "r",  encoding="utf-8") as file:
+with open(
+    "machine-learning-client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
+) as file:
     classNames = file.read().split("\n")
 
 print(classNames)

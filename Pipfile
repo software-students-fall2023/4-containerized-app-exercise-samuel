@@ -6,8 +6,15 @@ name = "pypi"
 [packages]
 pylint = "*"
 black = "*"
+tomli = "*"
+typing-extensions = "*"
+dill = "*"
+numpy = "*"
+mediapipe = "*"
+tensorflow = "*"
+flask = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.10"
