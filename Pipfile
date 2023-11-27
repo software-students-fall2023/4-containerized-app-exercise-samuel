@@ -13,6 +13,11 @@ numpy = "*"
 mediapipe = "*"
 tensorflow = "*"
 flask = "*"
+certifi = "*"
+pymongo = "*"
+python-dotenv = "*"
+pytest = "*"
+pytest-mongo = "*"
 
 [dev-packages]
 

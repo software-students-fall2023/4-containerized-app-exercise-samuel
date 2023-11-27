@@ -21,7 +21,7 @@ if os.getenv("FLASK_ENV", "development") == "development":
 @app.route("/")
 def hello():
     """
-    Welcome page which starts the app. 
+    Welcome page which starts the app.
     """
     return render_template("welcome.html")
 
@@ -37,7 +37,7 @@ def victory():
 @app.route("/thumbsUp", methods=["GET"])
 def thumbs_up():
     """
-    Pulls the picture of jesus on thumbs up gesture 
+    Pulls the picture of jesus on thumbs up gesture
     """
     return render_template("thumbsUp.html")
 
