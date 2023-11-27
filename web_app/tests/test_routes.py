@@ -3,6 +3,7 @@ Tests to check the front end routes are working correctly.
 """
 # pylint: disable=W0621
 # pylint: disable=C0413
+# pylint: disable=E0401
 
 import sys
 import pytest
