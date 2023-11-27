@@ -1,5 +1,5 @@
 """
-Does a thing. 
+Front end web page routes
 """
 
 import os
@@ -21,7 +21,7 @@ if os.getenv("FLASK_ENV", "development") == "development":
 @app.route("/")
 def hello():
     """
-    Does a thing.
+    Welcome page which starts the app. 
     """
     return render_template("welcome.html")
 
@@ -29,7 +29,7 @@ def hello():
 @app.route("/victory", methods=["GET"])
 def victory():
     """
-    Does a thing.
+    Pull the picture of churchill on victory gesture
     """
     return render_template("victory.html")
 
@@ -37,7 +37,7 @@ def victory():
 @app.route("/thumbsUp", methods=["GET"])
 def thumbs_up():
     """
-    Does a thing.
+    Pulls the picture of jesus on thumbs up gesture 
     """
     return render_template("thumbsUp.html")
 
@@ -45,7 +45,7 @@ def thumbs_up():
 @app.route("/thumbsDown", methods=["GET"])
 def thumbs_down():
     """
-    Does a thing.
+    Pulls a picture of the devil on thumbs down gesture
     """
     return render_template("thumbsDown.html")
 
@@ -53,7 +53,7 @@ def thumbs_down():
 @app.route("/stop", methods=["GET"])
 def stop():
     """
-    Does a thing.
+    Pull a picture of a snail on open palm gesture
     """
     return render_template("stop.html")
 
@@ -61,6 +61,6 @@ def stop():
 @app.route("/rock", methods=["GET"])
 def rock():
     """
-    Does a thing.
+    Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
