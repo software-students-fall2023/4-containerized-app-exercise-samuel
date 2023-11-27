@@ -12,6 +12,45 @@ import cv2
 import numpy as np
 import mediapipe as mp
 import tensorflow as tf
+import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+import os
+import dotenv
+from dotenv import load_dotenv
+import certifi
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+
+
+"""
+
+"peace" : victory
+"thumbs up" : thumb_up
+"thumbs down" : thumb_down
+
+"stop" : open_palm
+"rock": love
+"fist" :closed
+
+
+
+"""
+
+
+# create a db instance 
+db = None
+
+client = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
+
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    db = client[os.getenv("MONGO_DBNAME")]
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
 
 
 mpHands = mp.solutions.hands
@@ -19,11 +58,11 @@ hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.98)
 mpDraw = mp.solutions.drawing_utils
 
 # Load the gesture recognizer model
-model = tf.keras.models.load_model("machine-learning-client/mp_hand_gesture")
+model = tf.keras.models.load_model("machine_learning_client/mp_hand_gesture")
 
 # Load class names
 with open(
-    "machine-learning-client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
+    "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
 ) as file:
     classNames = file.read().split("\n")
 
@@ -62,7 +101,10 @@ while True:
         # print(prediction)
         classID = np.argmax(prediction)
         CLASS_NAME = classNames[classID]
+
         print(CLASS_NAME)
+        if CLASS_NAME and (CLASS_NAME == "peace" or CLASS_NAME == "fist" or CLASS_NAME == "stop" or CLASS_NAME == "rock" or CLASS_NAME == "thumbs up" or CLASS_NAME == "thumbs down"):
+            db.gestures.insert_one({"gesture":CLASS_NAME})
 
     # show the prediction on the frame
     cv2.putText(
