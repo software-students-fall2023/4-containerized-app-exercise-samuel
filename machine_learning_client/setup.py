@@ -11,6 +11,8 @@ while the recognition aspect utilized the TensorFlow framework.
 # pylint: disable=R1714
 # pylint: disable=R0916
 # pylint: disable=W0718
+# pylint: disable=E0401
+
 import os
 import cv2
 import numpy as np

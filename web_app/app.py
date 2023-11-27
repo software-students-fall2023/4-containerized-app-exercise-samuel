@@ -18,6 +18,8 @@ sys.path.append('../')
 # pylint: disable=W0718
 # pylint: disable=W0621
 # pylint: disable=W1510
+# pylint: disable=E0401
+# pylint: disable=R0801
 
 
 GESTURES_ARR = ["thumbs up","thumbs down","fist","stop","peace","rock"]
