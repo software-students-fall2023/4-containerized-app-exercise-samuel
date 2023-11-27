@@ -8,45 +8,31 @@ The detection process used the MediaPipe library,
 while the recognition aspect utilized the TensorFlow framework.
 """
 # pylint: disable=no-member
+# pylint: disable=R1714
+# pylint: disable=R0916
+# pylint: disable=W0718
+import os
 import cv2
 import numpy as np
 import mediapipe as mp
 import tensorflow as tf
-import pymongo
 from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-import os
-import dotenv
-from dotenv import load_dotenv
 import certifi
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-
-
-"""
-
-"peace" : victory
-"thumbs up" : thumb_up
-"thumbs down" : thumb_down
-
-"stop" : open_palm
-"rock": love
-"fist" :closed
 
 
 
-"""
 
 
-# create a db instance 
-db = None
 
-client = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
+# create a db instance
+DB = None
+client = MongoClient(os.getenv('MONGO_URI'),
+    serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
 
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
-    db = client[os.getenv("MONGO_DBNAME")]
+    DB = client[os.getenv("MONGO_DBNAME")]
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
@@ -103,8 +89,10 @@ while True:
         CLASS_NAME = classNames[classID]
 
         print(CLASS_NAME)
-        if CLASS_NAME and (CLASS_NAME == "peace" or CLASS_NAME == "fist" or CLASS_NAME == "stop" or CLASS_NAME == "rock" or CLASS_NAME == "thumbs up" or CLASS_NAME == "thumbs down"):
-            db.gestures.insert_one({"gesture":CLASS_NAME})
+        if CLASS_NAME and (CLASS_NAME == "peace" or CLASS_NAME == "fist" or CLASS_NAME == "stop"
+                           or CLASS_NAME == "rock" or CLASS_NAME == "thumbs up"
+                           or CLASS_NAME == "thumbs down"):
+            DB.gestures.insert_one({"gesture":CLASS_NAME})
 
     # show the prediction on the frame
     cv2.putText(
