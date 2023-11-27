@@ -25,4 +25,6 @@ jobs:
           pipenv install -e .
       - name: Test with pytest
         run: |
+          cd $GITHUB_WORKSPACE/web_app/tests  
           pipenv run python -m pytest
+        
