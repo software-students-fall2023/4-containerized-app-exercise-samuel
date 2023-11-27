@@ -27,4 +27,5 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/web_app/tests  
           pipenv run python -m pytest
+          pipenv run python -m coverage report --include=src/**/*.py --fail-under=80
         
