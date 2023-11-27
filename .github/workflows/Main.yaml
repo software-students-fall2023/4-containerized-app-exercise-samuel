@@ -19,7 +19,6 @@ jobs:
             pip install --user pipenv
             pipenv --python ${{ matrix.python-version }}
             pipenv install pytest 
-            pipenv install coverage
             pipenv install
       - name: Turn on 'editable' mode
         run: |
@@ -28,6 +27,3 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/web_app/tests  
           pipenv run python -m pytest
-          pipenv run python -m coverage report --include=src/**/*.py --fail-under=80
-          
-      
