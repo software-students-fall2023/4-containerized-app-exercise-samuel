@@ -7,13 +7,16 @@ Tests to check the front end routes are working correctly.
 
 import sys
 import pytest
+from unittest.mock import Mock
 
 sys.path.append("..")
 
-from app import app
+from app import app,initialize_database
 
 # KEY - RUN WITH: python -m pytest
 
+app.config["MLdata"] = "test_db"
+mocker = Mock()
 
 @pytest.fixture
 def client():
@@ -79,3 +82,16 @@ def test_camera(client):
     """
     response = client.get("/camera")
     assert response.status_code == 302
+
+
+def test_delete_route(client):
+    """
+    Test the delete route
+    """
+    response = client.get("/delete")
+    assert response.status_code == 302
+
+
+def test_initialize_database(mocker):
+    mocker.patch('app.initialize_database')
+    assert initialize_database() is not None
