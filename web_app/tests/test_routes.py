@@ -13,7 +13,7 @@ from unittest.mock import Mock
 
 sys.path.append("..")
 
-from app import app, initialize_database
+from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
@@ -85,21 +85,17 @@ def test_camera(client):
     assert response.status_code == 302
 
 
-def test_delete_route(client):
+def test_delete_route(client,mocker):
     """
     Test the delete route
     """
+    mocker.patch("app.initialize_database")
     response = client.get("/delete")
     assert response.status_code == 302
 
 
 
-def test_initialize_database():
-    with patch("app.initialize_database") as mock_initialize_database:
-        mock_database_connection = Mock()
-        mock_initialize_database.return_value = mock_database_connection
-
-        result = initialize_database()
-        
-       
-        assert result is None
+def test_test_route(client, mocker):
+    mocker.patch("app.gesture_display", return_value="thumbs up")
+    response = client.get("/test")
+    assert response.status_code == 302
