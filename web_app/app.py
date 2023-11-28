@@ -95,7 +95,9 @@ def delete():
     """
     db = initialize_database()
 
-    db.gestures.delete_many({})
+    if db and db.gestures :
+        db.gestures.delete_many({})
+        
     return redirect(url_for("hello"))
 
 
