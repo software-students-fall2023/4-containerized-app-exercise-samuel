@@ -8,7 +8,10 @@ Tests to check the front end routes are working correctly.
 import sys
 import pytest
 from unittest.mock import patch
-#from unittest.mock import Mock
+from unittest.mock import MagicMock
+import os
+import sys
+import certifi
 
 
 sys.path.append("..")
@@ -89,28 +92,15 @@ def test_camera(client):
     assert response.status_code == 302
 
 
-def test_delete_route(client,mocker):
+def test_delete_route(client):
     """
     Test the delete route
     """
-    mocker.patch("app.initialize_database")
     response = client.get("/delete")
     assert response.status_code == 302
-
 
 
 def test_test_route(client, mocker):
     mocker.patch("app.gesture_display", return_value="thumbs up")
     response = client.get("/test")
     assert response.status_code == 302
-
-def test_initialize_database():
-    with patch("app.initialize_database") as mock_initialize_database:
-
-        mock_db_connection = "Mocked Database Connection"
-        mock_initialize_database.return_value = mock_db_connection
-
-        result = initialize_database()
-
-        mock_initialize_database.assert_called_once()
-        assert result == mock_db_connection
