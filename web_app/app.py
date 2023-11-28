@@ -18,7 +18,6 @@ from flask import Flask, render_template, redirect, url_for
 sys.path.append("../")
 
 
-
 GESTURES_ARR = ["thumbs up", "thumbs down", "fist", "stop", "peace", "rock"]
 
 app = Flask(__name__)
@@ -62,7 +61,7 @@ def gesture_display():
     max_obj = {"value": arr[0], "id": 0}
     for i in range(1, len(arr)):
         if arr[i] > max_obj["value"]:
-            max_obj = {"value":arr[i], "id":i}
+            max_obj = {"value": arr[i], "id": i}
 
     print(
         "this is the thumb up gesture :"
