@@ -6,6 +6,7 @@ Gesture Recognition System
 # pylint: disable=R0916
 # pylint: disable=W0718
 # pylint: disable=E0401
+# pylint: disable=W0621
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
 import os
