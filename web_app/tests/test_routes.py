@@ -101,6 +101,6 @@ def test_delete_route(client):
 
 
 def test_test_route(client, mocker):
-    mocker.patch("app.gesture_display", return_value="thumbs up")
+    #mocker.patch("app.gesture_display", return_value="thumbs up")
     response = client.get("/test")
     assert response.status_code == 302
