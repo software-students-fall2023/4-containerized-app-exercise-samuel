@@ -97,7 +97,7 @@ def test_initialize_database():
     with patch("app.initialize_database") as mock_initialize_database:
         result = initialize_database()
 
-    mock_initialize_database.assert_called_once()
+        mock_initialize_database.assert_called_once()
 
     
-    assert result is not None
+        assert result is not None
