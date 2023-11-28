@@ -8,7 +8,7 @@ Tests to check the front end routes are working correctly.
 import sys
 import pytest
 from unittest.mock import patch
-from unittest.mock import Mock
+#from unittest.mock import Mock
 
 
 sys.path.append("..")
@@ -17,7 +17,11 @@ from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
-app.config["MLdata"] = "test_db"
+
+@pytest.fixture
+def mocker():
+    from unittest.mock import Mock
+    return Mock()
 
 @pytest.fixture
 def client():
@@ -99,3 +103,14 @@ def test_test_route(client, mocker):
     mocker.patch("app.gesture_display", return_value="thumbs up")
     response = client.get("/test")
     assert response.status_code == 302
+
+def test_initialize_database():
+    with patch("app.initialize_database") as mock_initialize_database:
+
+        mock_db_connection = "Mocked Database Connection"
+        mock_initialize_database.return_value = mock_db_connection
+
+        result = initialize_database()
+
+        mock_initialize_database.assert_called_once()
+        assert result == mock_db_connection
