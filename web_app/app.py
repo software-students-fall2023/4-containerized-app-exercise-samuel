@@ -11,7 +11,8 @@ Front end web page routes
 import os
 import sys
 import subprocess
-from pymongo import MongoClient
+import pymongo
+from pymongo.mongo_client import MongoClient
 import certifi
 from flask import Flask, render_template, redirect, url_for
 
@@ -29,20 +30,23 @@ if os.getenv("FLASK_ENV", "development") == "development":
     app.debug = True
 
 
-# create a db instance
-DB = None
-
-client = MongoClient(
-    os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-)
-
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command("ping")
-    DB = client[os.getenv("MONGO_DBNAME")]
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+def initialize_database():
+    """
+    Initializes the database connection and returns the db connection object
+    """
+    client = MongoClient(
+        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
+    )
+    try:
+        client.admin.command("ping")
+        db_connection = client[os.getenv("MONGO_DBNAME")]
+        print("Pinged your deployment. You successfully connected to MongoDB!")
+        return db_connection
+    except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
+        print(f"Server selection timeout error: {timeout_error}")
+    except pymongo.errors.ConnectionFailure as connection_failure:
+        print(f"MongoDB connection failure: {connection_failure}")
+    return None
 
 
 def gesture_display():
@@ -50,12 +54,17 @@ def gesture_display():
     aggregate the frequency of each gesture
     find the gesture with the most frequency and return
     """
-    thumb_up = DB.gestures.count_documents({"gesture": "thumbs up"})
-    thumb_down = DB.gestures.count_documents({"gesture": "thumbs down"})
-    fist = DB.gestures.count_documents({"gesture": "fist"})
-    open_palm = DB.gestures.count_documents({"gesture": "stop"})
-    peace = DB.gestures.count_documents({"gesture": "peace"})
-    love = DB.gestures.count_documents({"gesture": "rock"})
+    db = initialize_database()
+
+    if db is None:
+        return
+    
+    thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
+    thumb_down = db.gestures.count_documents({"gesture": "thumbs down"})
+    fist = db.gestures.count_documents({"gesture": "fist"})
+    open_palm = db.gestures.count_documents({"gesture": "stop"})
+    peace = db.gestures.count_documents({"gesture": "peace"})
+    love = db.gestures.count_documents({"gesture": "rock"})
 
     arr = [thumb_up, thumb_down, fist, open_palm, peace, love]
 
@@ -87,7 +96,12 @@ def delete():
     """
     delete gesture database
     """
-    DB.gestures.delete_many({})
+    db = initialize_database()
+
+    if db is None:
+        return 
+    
+    db.gestures.delete_many({})
     return redirect(url_for("hello"))
 
 
