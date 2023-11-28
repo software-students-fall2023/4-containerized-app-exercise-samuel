@@ -37,6 +37,7 @@ def initialize_database():
         print(f"MongoDB connection failure: {connection_failure}")
     return None
 
+
 # Load the gesture recognizer model
 model = tf.keras.models.load_model("machine_learning_client/mp_hand_gesture")
 
@@ -45,6 +46,7 @@ with open(
     "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
 ) as file:
     classNames = file.read().split("\n")
+
 
 def initialize_hand_tracking():
     """

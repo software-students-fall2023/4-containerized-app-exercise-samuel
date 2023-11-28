@@ -13,41 +13,36 @@ import sys
 import subprocess
 from pymongo import MongoClient
 import certifi
-from flask import (
-    Flask,
-    render_template,
-    redirect,
-    url_for
-)
-sys.path.append('../')
+from flask import Flask, render_template, redirect, url_for
+
+sys.path.append("../")
 
 
 
-GESTURES_ARR = ["thumbs up","thumbs down","fist","stop","peace","rock"]
+GESTURES_ARR = ["thumbs up", "thumbs down", "fist", "stop", "peace", "rock"]
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-
 
 
 if os.getenv("FLASK_ENV", "development") == "development":
     app.debug = True
 
 
-#create a db instance
+# create a db instance
 DB = None
 
-client = MongoClient(os.getenv('MONGO_URI'),
-serverSelectionTimeoutMS=5000,tlsCAFile=certifi.where())
+client = MongoClient(
+    os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
+)
 
 # Send a ping to confirm a successful connection
 try:
-    client.admin.command('ping')
+    client.admin.command("ping")
     DB = client[os.getenv("MONGO_DBNAME")]
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
-
 
 
 def gesture_display():
@@ -55,25 +50,37 @@ def gesture_display():
     aggregate the frequency of each gesture
     find the gesture with the most frequency and return
     """
-    thumb_up = DB.gestures.count_documents({"gesture":"thumbs up"})
-    thumb_down = DB.gestures.count_documents({"gesture":"thumbs down"})
-    fist = DB.gestures.count_documents({"gesture":"fist"})
-    open_palm = DB.gestures.count_documents({"gesture":"stop"})
-    peace = DB.gestures.count_documents({"gesture":"peace"})
-    love = DB.gestures.count_documents({"gesture":"rock"})
+    thumb_up = DB.gestures.count_documents({"gesture": "thumbs up"})
+    thumb_down = DB.gestures.count_documents({"gesture": "thumbs down"})
+    fist = DB.gestures.count_documents({"gesture": "fist"})
+    open_palm = DB.gestures.count_documents({"gesture": "stop"})
+    peace = DB.gestures.count_documents({"gesture": "peace"})
+    love = DB.gestures.count_documents({"gesture": "rock"})
 
-    arr = [thumb_up,thumb_down,fist,open_palm,peace,love]
+    arr = [thumb_up, thumb_down, fist, open_palm, peace, love]
 
-    max_obj = {"value":arr[0],"id":0}
-    for i in range(1,len(arr)):
+    max_obj = {"value": arr[0], "id": 0}
+    for i in range(1, len(arr)):
         if arr[i] > max_obj["value"]:
             max_obj = {"value":arr[i], "id":i}
-
-    print("this is the thumb up gesture :"  + str(thumb_up) + " thumb down: "
-          + str(thumb_down) + "fist "
-        + str(fist) + "stop " + str(open_palm) + "peace: " + str(peace) + "rock: " + str(love))
-
+    
+    print(
+        "this is the thumb up gesture :"
+        + str(thumb_up)
+        + " thumb down: "
+        + str(thumb_down)
+        + "fist "
+        + str(fist)
+        + "stop "
+        + str(open_palm)
+        + "peace: "
+        + str(peace)
+        + "rock: "
+        + str(love)
+    )
+    
     return GESTURES_ARR[max_obj["id"]]
+
 
 @app.route("/delete")
 def delete():
@@ -82,6 +89,7 @@ def delete():
     """
     DB.gestures.drop()
     return redirect(url_for("hello"))
+
 
 @app.route("/test")
 def test():
@@ -106,15 +114,16 @@ def test():
 
     return redirect(url_for("hello"))
 
+
 @app.route("/camera")
 def camera():
     """
     trigger the machine learning client
     """
     try:
-        file_path = 'machine_learning_client/setup.py'
+        file_path = "machine_learning_client/setup.py"
         print(file_path)
-        subprocess.run(['python', file_path])
+        subprocess.run(["python", file_path])
         return redirect(url_for("hello"))
 
     except Exception as e:
