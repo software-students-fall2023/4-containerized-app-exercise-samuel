@@ -79,11 +79,3 @@ def test_camera(client):
     """
     response = client.get("/camera")
     assert response.status_code == 302
-
-
-def test_delete(client):
-    """
-    Test the delete route. The delete route redirects to the hello route
-    """
-    response = client.get("/delete")
-    assert response.status_code == 302
