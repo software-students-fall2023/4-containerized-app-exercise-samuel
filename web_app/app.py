@@ -87,7 +87,7 @@ def delete():
     """
     delete gesture database
     """
-    DB.gestures.drop()
+    DB.gestures.delete_many({})
     return redirect(url_for("hello"))
 
 
