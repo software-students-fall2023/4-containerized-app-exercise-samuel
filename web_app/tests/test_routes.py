@@ -7,7 +7,7 @@ Tests to check the front end routes are working correctly.
 
 import sys
 import pytest
-from unittest.mock import Mock
+from unittest.mock import patch
 
 
 sys.path.append("..")
@@ -93,10 +93,10 @@ def test_delete_route(client):
     assert response.status_code == 302
 
 
-def test_initialize_database(mocker):
+def test_initialize_database():
     
-    mock_initialize_database = mocker.patch("app.initialize_database")
-    result = initialize_database()
+    with patch("app.initialize_database") as mock_initialize_database:
+        result = initialize_database()
 
     mock_initialize_database.assert_called_once()
 
