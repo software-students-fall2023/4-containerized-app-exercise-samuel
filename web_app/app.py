@@ -118,7 +118,7 @@ def test():
 @app.route("/camera")
 def camera():
     """
-    trigger the machine learning client
+    trigger the machine learning client and camera
     """
     try:
         file_path = "machine_learning_client/setup.py"
