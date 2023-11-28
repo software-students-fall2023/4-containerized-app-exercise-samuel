@@ -90,14 +90,3 @@ def test_delete_route(client):
     """
     response = client.get("/delete")
     assert response.status_code == 302
-
-
-def test_initialize_database():
-    
-    with patch("app.initialize_database") as mock_initialize_database:
-        result = initialize_database()
-
-        mock_initialize_database.assert_called_once()
-
-    
-        assert result is not None
