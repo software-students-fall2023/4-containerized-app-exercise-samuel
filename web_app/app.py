@@ -1,5 +1,5 @@
 """
-web app file
+Front end web page routes
 """
 
 # pylint: disable=R0911
@@ -132,7 +132,7 @@ def hello():
 @app.route("/victory", methods=["GET"])
 def victory():
     """
-    takes the user to the victory page
+    Pull the picture of churchill on victory gesture
     """
     return render_template("victory.html")
 
@@ -140,7 +140,7 @@ def victory():
 @app.route("/thumbsUp", methods=["GET"])
 def thumbs_up():
     """
-   takes the user to the thumbs up page
+    Pulls the picture of jesus on thumbs up gesture
     """
     return render_template("thumbsUp.html")
 
@@ -148,7 +148,7 @@ def thumbs_up():
 @app.route("/thumbsDown", methods=["GET"])
 def thumbs_down():
     """
-    takes the user to the thumbs down page
+    Pulls a picture of the devil on thumbs down gesture
     """
     return render_template("thumbsDown.html")
 
@@ -156,7 +156,7 @@ def thumbs_down():
 @app.route("/stop", methods=["GET"])
 def stop():
     """
-    takes the user to the stop page
+    Pull a picture of a snail on open palm gesture
     """
     return render_template("stop.html")
 
@@ -164,6 +164,6 @@ def stop():
 @app.route("/rock", methods=["GET"])
 def rock():
     """
-    takes the user to the rock page
+    Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
