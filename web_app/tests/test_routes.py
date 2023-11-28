@@ -24,7 +24,6 @@ def client():
     Creates a flask testing client to simmulate calls to the web-app.
     """
     app.config["TESTING"] = True
-    mocker = Mock()
     with app.test_client() as client:
         yield client
 
