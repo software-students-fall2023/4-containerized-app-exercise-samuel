@@ -97,9 +97,6 @@ def delete():
     delete gesture database
     """
     db = initialize_database()
-
-    if db is None:
-        return 
     
     db.gestures.delete_many({})
     return redirect(url_for("hello"))
