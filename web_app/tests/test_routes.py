@@ -71,3 +71,27 @@ def test_rock_route(client):
     """
     response = client.get("/rock")
     assert response.status_code == 200
+
+
+def test_camera(client):
+    """
+    Test the camera route. The camera route redirects to the hello route
+    """
+    response = client.get("/camera")
+    assert response.status_code == 302
+
+
+def test_delete(client):
+    """
+    Test the delete route. The delete route redirects to the hello route
+    """
+    response = client.get("/delete")
+    assert response.status_code == 302
+
+
+def test_test(client):
+    """
+    Test the test route. The test route redirects to the corresponding route
+    """
+    response = client.get("/test")
+    assert response.status_code == 302

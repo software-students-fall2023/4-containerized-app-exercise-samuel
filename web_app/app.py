@@ -15,6 +15,7 @@ from pymongo import MongoClient
 import certifi
 from flask import Flask, render_template, redirect, url_for
 
+
 sys.path.append("../")
 
 
