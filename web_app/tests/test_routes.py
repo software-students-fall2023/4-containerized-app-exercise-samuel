@@ -17,7 +17,6 @@ from app import app, initialize_database
 # KEY - RUN WITH: python -m pytest
 
 app.config["MLdata"] = "test_db"
-mocker = Mock()
 
 @pytest.fixture
 def client():
@@ -94,5 +93,11 @@ def test_delete_route(client):
 
 
 def test_initialize_database(mocker):
-    mocker.patch("app.initialize_database")
-    assert initialize_database() is not None
+    
+    mock_initialize_database = mocker.patch("app.initialize_database")
+    result = initialize_database()
+
+    mock_initialize_database.assert_called_once()
+
+    
+    assert result is not None
