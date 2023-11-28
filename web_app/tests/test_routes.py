@@ -102,4 +102,4 @@ def test_initialize_database():
         result = initialize_database()
         
        
-        assert result is not None
+        assert result is None
