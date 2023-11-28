@@ -78,7 +78,7 @@ def gesture_display():
         + "rock: "
         + str(love)
     )
-   
+
     return GESTURES_ARR[max_obj["id"]]
 
 
