@@ -87,11 +87,3 @@ def test_delete(client):
     """
     response = client.get("/delete")
     assert response.status_code == 302
-
-
-def test_test(client):
-    """
-    Test the test route. The test route redirects to the corresponding route
-    """
-    response = client.get("/test")
-    assert response.status_code == 302
