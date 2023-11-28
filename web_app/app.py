@@ -63,7 +63,7 @@ def gesture_display():
     for i in range(1, len(arr)):
         if arr[i] > max_obj["value"]:
             max_obj = {"value":arr[i], "id":i}
-    
+
     print(
         "this is the thumb up gesture :"
         + str(thumb_up)
@@ -78,7 +78,7 @@ def gesture_display():
         + "rock: "
         + str(love)
     )
-    
+   
     return GESTURES_ARR[max_obj["id"]]
 
 
