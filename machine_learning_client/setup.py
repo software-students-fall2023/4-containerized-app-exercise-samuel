@@ -2,6 +2,11 @@
 Gesture Recognition System
 """
 # pylint: disable=no-member
+# pylint: disable=R1714
+# pylint: disable=R0916
+# pylint: disable=W0718
+# pylint: disable=E0401
+# pylint: disable=W0621
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
 import os
@@ -31,6 +36,16 @@ def initialize_database():
     except pymongo.errors.ConnectionFailure as connection_failure:
         print(f"MongoDB connection failure: {connection_failure}")
     return None
+
+
+# Load the gesture recognizer model
+model = tf.keras.models.load_model("machine_learning_client/mp_hand_gesture")
+
+# Load class names
+with open(
+    "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
+) as file:
+    classNames = file.read().split("\n")
 
 
 def initialize_hand_tracking():

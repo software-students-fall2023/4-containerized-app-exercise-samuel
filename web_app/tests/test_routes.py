@@ -7,18 +7,34 @@ Tests to check the front end routes are working correctly.
 
 import sys
 import pytest
+from unittest.mock import patch
+from unittest.mock import MagicMock
+import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.database import Database
+import os
+import sys
+import certifi
+
 
 sys.path.append("..")
 
-from app import app
+from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
 
 @pytest.fixture
+def mocker():
+    from unittest.mock import Mock
+
+    return Mock()
+
+
+@pytest.fixture
 def client():
     """
-    Creates a flask testing client to simmulate calls to the web-app
+    Creates a flask testing client to simmulate calls to the web-app.
     """
     app.config["TESTING"] = True
     with app.test_client() as client:
@@ -71,3 +87,46 @@ def test_rock_route(client):
     """
     response = client.get("/rock")
     assert response.status_code == 200
+
+
+def test_camera(client):
+    """
+    Test the camera route. The camera route redirects to the hello route
+    """
+    response = client.get("/camera")
+    assert response.status_code == 302
+
+
+def test_delete_route(client):
+    """
+    Test the delete route
+    """
+    response = client.get("/delete")
+    assert response.status_code == 302
+
+
+def test_test_route(client):
+    """
+    Test the test route
+    """
+    response = client.get("/test")
+    assert response.status_code == 302
+
+
+def test_initialize_database():
+    """
+    Test the initialize database function
+    """
+    os.environ[
+        "MONGO_URI"
+    ] = "mongodb+srv://lemonade:123456NYU@cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
+    os.environ["MONGO_DBNAME"] = "MLdata"
+
+    print(f'Database name from env: {os.getenv("MONGO_URI")}')
+    print(f'Database name from env: {os.getenv("MONGO_DBNAME")}')
+
+    db_connection = initialize_database()
+
+    assert isinstance(
+        db_connection, Database
+    ), "DB connection is not an instance of MongoClient"
