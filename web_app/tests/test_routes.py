@@ -129,4 +129,5 @@ def test_initialize_database():
 
     assert isinstance(
         db_connection, Database
+    
     ), "DB connection is not an instance of MongoClient"

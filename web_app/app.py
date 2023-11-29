@@ -56,8 +56,7 @@ def gesture_display():
     """
     db = initialize_database()
 
-
-    if db is not None :
+    if db is not None:
         thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
         thumb_down = db.gestures.count_documents({"gesture": "thumbs down"})
         fist = db.gestures.count_documents({"gesture": "fist"})
