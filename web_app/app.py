@@ -56,7 +56,7 @@ def gesture_display():
     """
     db = initialize_database()
 
-    if db : 
+    if db is not None : 
 
         thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
         thumb_down = db.gestures.count_documents({"gesture": "thumbs down"})
@@ -98,7 +98,7 @@ def delete():
     """
     db = initialize_database()
 
-    if db and db.gestures :
+    if db is not None and db.gestures is not None :
         db.gestures.delete_many({})
 
     return redirect(url_for("hello"))

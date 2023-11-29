@@ -9,6 +9,7 @@ import sys
 import pytest
 from unittest.mock import patch
 from unittest.mock import MagicMock
+import pymongo
 import os
 import sys
 import certifi
@@ -106,5 +107,49 @@ def test_test_route(client):
     """
     response = client.get("/test")
     assert response.status_code == 302
+
+
+def test_initialize_database():
+    """
+    Test the initialize database function
+    """
+    with patch("pymongo.MongoClient") as mock_client:
+        mock_db = MagicMock()
+        mock_client.return_value = mock_db
+
+        mock_db.admin.command.return_value = True
+
+        db = initialize_database()
+
+        # Print the calls made on the mock objects
+        print(f"mock_client.call_args_list: {mock_client.call_args_list}")
+        print(f"mock_db.admin.command.call_args_list: {mock_db.admin.command.call_args_list}")
+
+        mock_db.admin.command.assert_called_with('Ping')
+
+        assert db is mock_db
+
+
+def test_initialize_database_failure():
+    """
+    Test the initialize_database function when it fails to connect
+    """
+    # Mock the MongoClient object
+    with patch('pymongo.MongoClient') as mock_client:
+        mock_db = MagicMock()
+        mock_client.return_value = mock_db
+
+        # Mock unsuccessful ping
+        mock_db.admin.command.side_effect = pymongo.errors.ServerSelectionTimeoutError
+
+        # Call the function
+        db = initialize_database()
+
+        # Check if function called the command method with 'ping'
+        mock_db.admin.command.assert_called_with('ping')
+
+        # Check if the function returns None
+        assert db is None
+
 
 
