@@ -17,6 +17,7 @@ import sys
 import certifi
 
 
+
 sys.path.append("..")
 
 from app import app, initialize_database, gesture_display
@@ -116,8 +117,9 @@ def test_initialize_database():
     Test the initialize database function
     """
     os.environ["MONGO_URI"] = os.getenv("MONGO_URI")
-    os.environ["MONG0_DBNAME"] =  os.getenv("MONGO_DBNAME")
+    os.environ["MONGO_DBNAME"] =  os.getenv("MONGO_DBNAME")
 
+    print(f'Database name from env: {os.getenv("MONGO_URI")}')
     print(f'Database name from env: {os.getenv("MONGO_DBNAME")}')
 
     db_connection = initialize_database()
@@ -125,7 +127,7 @@ def test_initialize_database():
     assert isinstance(db_connection, Database), "DB connection is not an instance of MongoClient"
 
 
-   
+
         
         
 
