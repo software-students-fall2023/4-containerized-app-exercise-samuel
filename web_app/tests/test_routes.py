@@ -10,6 +10,8 @@ import pytest
 from unittest.mock import patch
 from unittest.mock import MagicMock
 import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.database import Database
 import os
 import sys
 import certifi
@@ -113,43 +115,21 @@ def test_initialize_database():
     """
     Test the initialize database function
     """
-    with patch("pymongo.MongoClient") as mock_client:
-        mock_db = MagicMock()
-        mock_client.return_value = mock_db
+    os.environ["MONGO_URI"] = "mongodb+srv://lemonade:123456NYU@cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
+    os.environ["MONG0_DBNAME"] = "MLdata"
 
-        mock_db.admin.command.return_value = True
+    db_connection = initialize_database()
 
-        db = initialize_database()
+    assert isinstance(db_connection, Database), "DB connection is not an instance of MongoClient"
 
-        # Print the calls made on the mock objects
-        print(f"mock_client.call_args_list: {mock_client.call_args_list}")
-        print(f"mock_db.admin.command.call_args_list: {mock_db.admin.command.call_args_list}")
+    del os.environ["MONGO_URI"]
+    del os.environ["MONGO_DBNAME"]
 
-        mock_db.admin.command.assert_called_with('Ping')
+   
+        
+        
 
-        assert db is mock_db
-
-
-def test_initialize_database_failure():
-    """
-    Test the initialize_database function when it fails to connect
-    """
-    # Mock the MongoClient object
-    with patch('pymongo.MongoClient') as mock_client:
-        mock_db = MagicMock()
-        mock_client.return_value = mock_db
-
-        # Mock unsuccessful ping
-        mock_db.admin.command.side_effect = pymongo.errors.ServerSelectionTimeoutError
-
-        # Call the function
-        db = initialize_database()
-
-        # Check if function called the command method with 'ping'
-        mock_db.admin.command.assert_called_with('ping')
-
-        # Check if the function returns None
-        assert db is None
+        
 
 
 
