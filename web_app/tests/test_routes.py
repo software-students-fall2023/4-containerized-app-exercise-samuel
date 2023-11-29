@@ -119,7 +119,7 @@ def test_initialize_database():
     """
     os.environ[
         "MONGO_URI"
-    ] = "***cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
+    ] = "mongodb+srv://lemonade:123456NYU@cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
     os.environ["MONGO_DBNAME"] = "MLdata"
 
     print(f'Database name from env: {os.getenv("MONGO_URI")}')
