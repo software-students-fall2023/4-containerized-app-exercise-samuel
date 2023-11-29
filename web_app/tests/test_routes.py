@@ -100,3 +100,11 @@ def test_delete_route(client):
     assert response.status_code == 302
 
 
+def test_test_route(client):
+    """
+    Test the test route
+    """
+    response = client.get("/test")
+    assert response.status_code == 302
+
+
