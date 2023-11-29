@@ -117,7 +117,7 @@ def test_initialize_database():
     Test the initialize database function
     """
     os.environ["MONGO_URI"] = os.getenv("MONGO_URI")
-    os.environ["MONGO_DBNAME"] =  os.getenv("MONGO_DBNAME")
+    os.environ["MONGO_DBNAME"] =  "MLdata"
 
     print(f'Database name from env: {os.getenv("MONGO_URI")}')
     print(f'Database name from env: {os.getenv("MONGO_DBNAME")}')
