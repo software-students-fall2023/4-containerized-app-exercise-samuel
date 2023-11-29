@@ -56,36 +56,39 @@ def gesture_display():
     """
     db = initialize_database()
 
-    thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
-    thumb_down = db.gestures.count_documents({"gesture": "thumbs down"})
-    fist = db.gestures.count_documents({"gesture": "fist"})
-    open_palm = db.gestures.count_documents({"gesture": "stop"})
-    peace = db.gestures.count_documents({"gesture": "peace"})
-    love = db.gestures.count_documents({"gesture": "rock"})
+    if db : 
 
-    arr = [thumb_up, thumb_down, fist, open_palm, peace, love]
+        thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
+        thumb_down = db.gestures.count_documents({"gesture": "thumbs down"})
+        fist = db.gestures.count_documents({"gesture": "fist"})
+        open_palm = db.gestures.count_documents({"gesture": "stop"})
+        peace = db.gestures.count_documents({"gesture": "peace"})
+        love = db.gestures.count_documents({"gesture": "rock"})
 
-    max_obj = {"value": arr[0], "id": 0}
-    for i in range(1, len(arr)):
-        if arr[i] > max_obj["value"]:
-            max_obj = {"value": arr[i], "id": i}
+        arr = [thumb_up, thumb_down, fist, open_palm, peace, love]
 
-    print(
-        "this is the thumb up gesture :"
-        + str(thumb_up)
-        + " thumb down: "
-        + str(thumb_down)
-        + "fist "
-        + str(fist)
-        + "stop "
-        + str(open_palm)
-        + "peace: "
-        + str(peace)
-        + "rock: "
-        + str(love)
-    )
+        max_obj = {"value": arr[0], "id": 0}
+        for i in range(1, len(arr)):
+            if arr[i] > max_obj["value"]:
+                max_obj = {"value": arr[i], "id": i}
 
-    return GESTURES_ARR[max_obj["id"]]
+        print(
+            "this is the thumb up gesture :"
+            + str(thumb_up)
+            + " thumb down: "
+            + str(thumb_down)
+            + "fist "
+            + str(fist)
+            + "stop "
+            + str(open_palm)
+            + "peace: "
+            + str(peace)
+            + "rock: "
+            + str(love)
+        )
+
+        return GESTURES_ARR[max_obj["id"]]
+    return redirect(url_for("hello"))
 
 
 @app.route("/delete")
@@ -97,7 +100,7 @@ def delete():
 
     if db and db.gestures :
         db.gestures.delete_many({})
-        
+
     return redirect(url_for("hello"))
 
 
