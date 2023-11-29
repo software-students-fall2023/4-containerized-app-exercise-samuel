@@ -115,8 +115,10 @@ def test_initialize_database():
     """
     Test the initialize database function
     """
-    os.environ["MONGO_URI"] = "mongodb+srv://lemonade:123456NYU@cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
-    os.environ["MONG0_DBNAME"] = "MLdata"
+    os.environ["MONGO_URI"] = os.getenv("MONGO_URI")
+    os.environ["MONG0_DBNAME"] =  os.getenv("MONGO_DBNAME")
+
+    print(f'Database name from env: {os.getenv("MONGO_DBNAME")}')
 
     db_connection = initialize_database()
 
