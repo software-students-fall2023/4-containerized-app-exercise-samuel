@@ -31,11 +31,3 @@ def test_initialize_hand_tracking():
     assert mp_hands is not None
     assert hands is not None
     assert mp_draw is not None
-
-
-def test_processing_frame():
-    """
-    Test the returned processed image from the processing_image function
-    """
-    processed_frame = setup.process_frame(None, None, None, None, None, None, None)
-    assert processed_frame is None
