@@ -45,9 +45,8 @@ def load_class_name():
     with open(
         "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
     ) as file:
-        classNames = file.read().split("\n")
-    return classNames
-
+        class_names = file.read().split("\n")
+    return class_names
 
 
 def initialize_hand_tracking():
@@ -131,7 +130,7 @@ def main():
     Main function that runs the hand gesture recognition system
     """
     cap = cv2.VideoCapture(0)
-    
+
     db_connection = initialize_database()
     if db_connection is None:
         return
