@@ -19,13 +19,10 @@ import certifi
 from pymongo.mongo_client import MongoClient
 
 
-def initialize_database():
+def initialize_database(client):
     """
     Initializes the database connection and returns the db connection object
     """
-    client = MongoClient(
-        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-    )
     try:
         client.admin.command("ping")
         db_connection = client[os.getenv("MONGO_DBNAME")]
@@ -78,6 +75,9 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
     """
     Processes the frame and returns the frame with the gesture label
     """
+    if frame or hands or mp_hands or mp_draw or model or class_names or db_connection is None:
+        return None
+    
     x, y, _ = frame.shape
     frame = cv2.flip(frame, 1)
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -130,8 +130,12 @@ def main():
     Main function that runs the hand gesture recognition system
     """
     cap = cv2.VideoCapture(0)
+    
+    client = MongoClient(
+        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
+    )
+    db_connection = initialize_database(client)
 
-    db_connection = initialize_database()
     if db_connection is None:
         return
 
