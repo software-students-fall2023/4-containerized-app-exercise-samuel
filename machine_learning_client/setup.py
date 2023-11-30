@@ -38,14 +38,16 @@ def initialize_database():
     return None
 
 
-# Load the gesture recognizer model
-model = tf.keras.models.load_model("machine_learning_client/mp_hand_gesture")
+def load_class_name():
+    """
+    Initializes the gesture names and returns the list of gesture names
+    """
+    with open(
+        "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
+    ) as file:
+        classNames = file.read().split("\n")
+    return classNames
 
-# Load class names
-with open(
-    "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
-) as file:
-    classNames = file.read().split("\n")
 
 
 def initialize_hand_tracking():
@@ -128,6 +130,8 @@ def main():
     """
     Main function that runs the hand gesture recognition system
     """
+    cap = cv2.VideoCapture(0)
+    
     db_connection = initialize_database()
     if db_connection is None:
         return
@@ -135,8 +139,6 @@ def main():
     mp_hands, hands, mp_draw = initialize_hand_tracking()
     model = load_gesture_model()
     class_names = load_class_names()
-
-    cap = cv2.VideoCapture(0)
 
     while True:
         _, frame = cap.read()
