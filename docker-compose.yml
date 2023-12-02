@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web_app:
+    build:
+      context: .
+      dockerfile: web_app/Dockerfile  # Add this line to specify the Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./database:/data/db
