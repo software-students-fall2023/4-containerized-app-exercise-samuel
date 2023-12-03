@@ -9,9 +9,7 @@ import pymongo
 import pytest
 from pymongo import MongoClient
 from machine_learning_client import setup
-import mongomock
 sys.path.append("..")
-import unittest 
 from unittest.mock import patch, Mock, MagicMock
 from pytest_mock_resources import create_mongo_fixture
 
