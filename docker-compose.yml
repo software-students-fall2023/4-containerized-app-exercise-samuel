@@ -11,6 +11,15 @@ services:
     environment:
       FLASK_APP: web_app/app.py
 
+  machine_learning_client:
+    build:
+      context: .
+      dockerfile: ./machine_learning_client/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - web_app
+
   mongodb:
     image: mongo
     ports:

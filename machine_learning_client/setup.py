@@ -123,7 +123,7 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
     return frame
 
 
-def main():
+def run_ml():
     """
     Main function that runs the hand gesture recognition system
     """
@@ -154,7 +154,3 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
-
-
-if __name__ == "__main__":
-    main()
