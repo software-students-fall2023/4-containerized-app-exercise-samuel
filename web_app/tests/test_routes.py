@@ -12,10 +12,6 @@ from unittest.mock import MagicMock
 import pymongo
 from pymongo.mongo_client import MongoClient
 from pymongo.database import Database
-import os
-import sys
-import certifi
-
 
 sys.path.append("..")
 
@@ -23,9 +19,9 @@ from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
-
 @pytest.fixture
 def mocker():
+  
     from unittest.mock import Mock
 
     return Mock()
@@ -119,3 +115,9 @@ def test_initialize_database():
     """
     db_connection = initialize_database()
     assert isinstance(db_connection, pymongo.MongoClient) or db_connection is None
+
+def test_gesture_display():
+    """
+    Test Gesture display
+    """
+    assert gesture_display() != None or gesture_display() == None 

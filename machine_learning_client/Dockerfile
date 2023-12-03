@@ -2,7 +2,10 @@ FROM python:3.8-slim
 
 WORKDIR /machine_learning_client
 
-COPY . /app
+# Print the current directory content
+RUN ls -al
+
+COPY . .
 
 COPY requirements.txt ./
 
