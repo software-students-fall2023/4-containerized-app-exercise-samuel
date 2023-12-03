@@ -4,11 +4,24 @@ Testing machine learning
 # pylint: disable=C0411
 # pylint: disable=C0413
 import sys
+import os 
+import pymongo
+import pytest
+from pymongo import MongoClient
 from machine_learning_client import setup
-
+import mongomock
 sys.path.append("..")
-from unittest.mock import patch
+import unittest 
+from unittest.mock import patch, Mock, MagicMock
+from pytest_mock_resources import create_mongo_fixture
 
+
+def test_initialize_database_timeout_error():
+    invalid_uri = "mongodb://invalid_uri"
+    client = MongoClient(invalid_uri)
+    database_name = "test_db"
+    db_connection = setup.initialize_database(client, database_name)
+    assert db_connection is None
 
 def test_load_class_name():
     """
@@ -31,3 +44,5 @@ def test_initialize_hand_tracking():
     assert mp_hands is not None
     assert hands is not None
     assert mp_draw is not None
+
+
