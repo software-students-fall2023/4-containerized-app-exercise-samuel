@@ -4,15 +4,10 @@ Testing machine learning
 # pylint: disable=C0411
 # pylint: disable=C0413
 import sys
-import os 
-import pymongo
-import pytest
 from pymongo import MongoClient
 from machine_learning_client import setup
 sys.path.append("..")
-from unittest.mock import patch, Mock, MagicMock
-from pytest_mock_resources import create_mongo_fixture
-
+from unittest.mock import patch
 
 def test_initialize_database_timeout_error():
     invalid_uri = "mongodb://invalid_uri"
