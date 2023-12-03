@@ -2,7 +2,7 @@
 .DS_Store
 
 #DB folder 
-database/ 
+/database/
 
 # visual studio code junk
 .vscode/
