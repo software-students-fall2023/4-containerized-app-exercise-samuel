@@ -19,13 +19,13 @@ import certifi
 from pymongo.mongo_client import MongoClient
 
 
-def initialize_database(client):
+def initialize_database(client, database_name):
     """
     Initializes the database connection and returns the db connection object
     """
     try:
         client.admin.command("ping")
-        db_connection = client[os.getenv("MONGO_DBNAME")]
+        db_connection = client[database_name]
         print("Pinged your deployment. You successfully connected to MongoDB!")
         return db_connection
     except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
@@ -132,7 +132,7 @@ def main():
     client = MongoClient(
         os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
     )
-    db_connection = initialize_database(client)
+    db_connection = initialize_database(client, os.getenv("MONGO_DBNAME"))
 
     if db_connection is None:
         return
