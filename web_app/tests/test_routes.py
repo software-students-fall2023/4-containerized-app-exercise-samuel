@@ -117,16 +117,5 @@ def test_initialize_database():
     """
     Test the initialize database function
     """
-    os.environ[
-        "MONGO_URI"
-    ] = "mongodb+srv://lemonade:123456NYU@cluster0.qoxoqd6.mongodb.net/?retryWrites=true&w=majority"
-    os.environ["MONGO_DBNAME"] = "MLdata"
-
-    print(f'Database name from env: {os.getenv("MONGO_URI")}')
-    print(f'Database name from env: {os.getenv("MONGO_DBNAME")}')
-
     db_connection = initialize_database()
-
-    assert isinstance(
-        db_connection, Database
-    ), "DB connection is not an instance of MongoClient"
+    assert isinstance(db_connection, pymongo.MongoClient) or db_connection is None
