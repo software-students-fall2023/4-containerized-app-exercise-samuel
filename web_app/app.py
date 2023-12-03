@@ -44,20 +44,6 @@ def initialize_database():
         print(f"Error connecting to local MongoDB: {e}")
         return None
 
-    # client = MongoClient(
-    #     os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-    # )
-    # try:
-    #     client.admin.command("ping")
-    #     db_connection = client[os.getenv("MONGO_DBNAME")]
-    #     print("Pinged your deployment. You successfully connected to MongoDB!")
-    #     return db_connection
-    # except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
-    #     print(f"Server selection timeout error: {timeout_error}")
-    # except pymongo.errors.ConnectionFailure as connection_failure:
-    #     print(f"MongoDB connection failure: {connection_failure}")
-    # return None
-
 
 def gesture_display():
     """
@@ -111,33 +97,6 @@ def delete():
         db.gestures.delete_many({})
 
     return redirect(url_for("hello"))
-
-
-@app.route("/test_db")
-def test_db():
-    db = initialize_database()
-    collection = db["temp"]
-
-    new_document = {
-        "name": "Samuel Alexander Shally",
-        "year": 2001,
-        "city": "Kuala Lumpur",
-    }
-
-    result = collection.insert_one(new_document)
-
-    inserted_id = result.inserted_id
-    document = collection.find_one({"_id": inserted_id})
-
-    if document:
-        name = document.get("name", "Default Name")
-        year = document.get("year", "Default Year")
-        city = document.get("city", "Default City")
-        data = f"My name is {name}, I was born in {year}, and I live in {city}."
-    else:
-        data = "Nothing in DB"
-
-    return render_template("displayData.html", data=data)
 
 
 @app.route("/test")
