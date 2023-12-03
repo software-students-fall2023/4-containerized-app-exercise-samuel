@@ -11,9 +11,7 @@ Front end web page routes
 import os
 import sys
 import subprocess
-import pymongo
 from pymongo.mongo_client import MongoClient
-import certifi
 from flask import Flask, render_template, redirect, url_for
 
 
@@ -34,19 +32,17 @@ def initialize_database():
     """
     Initializes the database connection and returns the db connection object
     """
-    client = MongoClient(
-        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-    )
     try:
+        local_uri = "mongodb://mongodb:27017"
+        client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
-        db_connection = client[os.getenv("MONGO_DBNAME")]
-        print("Pinged your deployment. You successfully connected to MongoDB!")
+        db_connection = client["database"]
+
+        print("Connected to the DB")
         return db_connection
-    except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
-        print(f"Server selection timeout error: {timeout_error}")
-    except pymongo.errors.ConnectionFailure as connection_failure:
-        print(f"MongoDB connection failure: {connection_failure}")
-    return None
+    except Exception as e:
+        print(f"Error connecting to local MongoDB: {e}")
+        return None
 
 
 def gesture_display():
@@ -133,7 +129,7 @@ def camera():
     trigger the machine learning client and camera
     """
     try:
-        file_path = "machine_learning_client/setup.py"
+        file_path = "../machine_learning_client/setup.py"
         print(file_path)
         subprocess.run(["python", file_path])
         return redirect(url_for("hello"))
