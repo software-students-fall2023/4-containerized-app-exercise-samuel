@@ -60,3 +60,4 @@ typing_extensions==3.6.6
 urllib3==2.1.0
 Werkzeug==3.0.1
 wrapt==1.14.1
+pymongo==4.6.0

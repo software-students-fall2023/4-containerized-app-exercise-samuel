@@ -2,12 +2,14 @@ version: '3'
 services:
   web_app:
     build:
-      context: .
-      dockerfile: web_app/Dockerfile  # Add this line to specify the Dockerfile
+      context: . 
+      dockerfile: ./web_app/Dockerfile
     ports:
-      - "5000:5000"
+      - "8080:5000"
     depends_on:
       - mongodb
+    environment:
+      FLASK_APP: web_app/app.py
 
   mongodb:
     image: mongo
