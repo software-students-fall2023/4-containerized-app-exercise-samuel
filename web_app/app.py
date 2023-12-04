@@ -10,7 +10,7 @@ Front end web page routes
 # pylint: disable=R0801
 import os
 import sys
-import subprocess
+import requests
 from pymongo.mongo_client import MongoClient
 from flask import Flask, render_template, redirect, url_for
 
@@ -33,7 +33,7 @@ def initialize_database():
     Initializes the database connection and returns the db connection object
     """
     try:
-        local_uri = "mongodb://mongodb:27017"
+        local_uri = "mongodb://localhost:27017/"
         client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
         db_connection = client["database"]
@@ -123,18 +123,13 @@ def test():
     return redirect(url_for("hello"))
 
 
-@app.route("/camera")
+@app.route('/camera')
 def camera():
-    """
-    trigger the machine learning client and camera
-    """
+    ml_client_url = 'http://localhost:5002/camera'  
     try:
-        file_path = "../machine_learning_client/setup.py"
-        print(file_path)
-        subprocess.run(["python", file_path])
-        return redirect(url_for("hello"))
-
-    except Exception as e:
+        return redirect(ml_client_url)
+    except requests.RequestException as e:
+        app.logger.error(f"An error occurred: {str(e)}")
         return f"An error occurred: {str(e)}"
 
 
