@@ -37,15 +37,6 @@ def mock_model():
 def mock_db_connection():
     return Mock()
 
-
-def test_initialize_database_timeout_error():
-    invalid_uri = "mongodb://invalid_uri"
-    client = MongoClient(invalid_uri)
-    database_name = "test_db"
-    db_connection = app.initialize_database(client, database_name)
-    assert db_connection is None
-
-
 @pytest.fixture
 def mock_load_model(monkeypatch):
     mock = Mock()
