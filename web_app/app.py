@@ -184,3 +184,7 @@ def rock():
     Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
