@@ -9,4 +9,4 @@ RUN pip install --upgrade pip \
 
 EXPOSE 80
 
-CMD ["python", "setup.py"]
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
