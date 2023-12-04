@@ -147,11 +147,9 @@ def run_ml():
     """
     Main function that runs the hand gesture recognition system
     """
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 
-    client = MongoClient(
-        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-    )
+   
     db_connection = initialize_database()
 
     if db_connection is None:
