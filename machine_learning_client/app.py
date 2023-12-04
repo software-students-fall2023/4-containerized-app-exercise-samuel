@@ -17,22 +17,23 @@ import tensorflow as tf
 import numpy as np
 import certifi
 from pymongo.mongo_client import MongoClient
+from flask import Flask, Response 
+
+app = Flask(__name__)
 
 
-def initialize_database(client, database_name):
-    """
-    Initializes the database connection and returns the db connection object
-    """
-    try:
-        client.admin.command("ping")
-        db_connection = client[database_name]
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-        return db_connection
-    except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
-        print(f"Server selection timeout error: {timeout_error}")
-    except pymongo.errors.ConnectionFailure as connection_failure:
-        print(f"MongoDB connection failure: {connection_failure}")
-    return None
+@app.route("/")
+def hello():
+    return "hello"
+
+
+def initialize_database():
+    client = pymongo.MongoClient("mongodb://localhost:27017/")
+    print("CLIENT : ", client)
+    db = client["database"]
+    if db is None:
+        print("db not connected")
+    return db
 
 
 def load_class_name():
@@ -122,17 +123,30 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
 
     return frame
 
+def generate_frames(cap, hands, mp_hands, mp_draw, model, class_names, db_connection):
+    while True:
+        _, frame = cap.read()
+        if frame is None:
+            break
 
+        processed_frame = process_frame(
+            frame, hands, mp_hands, mp_draw, model, class_names, db_connection
+        )
+
+        _, buffer = cv2.imencode('.jpg', processed_frame)
+        frame_bytes = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+        
+
+@app.route("/camera")
 def run_ml():
-    """
-    Main function that runs the hand gesture recognition system
-    """
     cap = cv2.VideoCapture(0)
 
     client = MongoClient(
         os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
     )
-    db_connection = initialize_database(client, os.getenv("MONGO_DBNAME"))
+    db_connection = initialize_database()
 
     if db_connection is None:
         return
@@ -141,16 +155,8 @@ def run_ml():
     model = load_gesture_model()
     class_names = load_class_names()
 
-    while True:
-        _, frame = cap.read()
+    return Response(generate_frames(cap, hands, mp_hands, mp_draw, model, class_names, db_connection),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-        processed_frame = process_frame(
-            frame, hands, mp_hands, mp_draw, model, class_names, db_connection
-        )
-
-        cv2.imshow("Output", processed_frame)
-        if cv2.waitKey(1) == ord("q"):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5002)
