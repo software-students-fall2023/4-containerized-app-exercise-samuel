@@ -13,7 +13,7 @@ import sys
 import subprocess
 from pymongo.mongo_client import MongoClient
 from flask import Flask, render_template, redirect, url_for
-
+import pymongo
 
 sys.path.append("../")
 
@@ -28,21 +28,20 @@ if os.getenv("FLASK_ENV", "development") == "development":
     app.debug = True
 
 
-def initialize_database():
+def initialize_database(client, database_name):
     """
     Initializes the database connection and returns the db connection object
     """
     try:
-        local_uri = "mongodb://mongodb:27017"
-        client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
-        db_connection = client["database"]
-
-        print("Connected to the DB")
+        db_connection = client[database_name]
+        print("Pinged your deployment. You successfully connected to MongoDB!")
         return db_connection
-    except Exception as e:
-        print(f"Error connecting to local MongoDB: {e}")
-        return None
+    except pymongo.errors.ServerSelectionTimeoutError as timeout_error:
+        print(f"Server selection timeout error: {timeout_error}")
+    except pymongo.errors.ConnectionFailure as connection_failure:
+        print(f"MongoDB connection failure: {connection_failure}")
+    return None
 
 
 def gesture_display():
@@ -50,7 +49,10 @@ def gesture_display():
     aggregate the frequency of each gesture
     find the gesture with the most frequency and return
     """
-    db = initialize_database()
+    client = pymongo.MongoClient(
+        "mongodb://localhost:27017"
+    )
+    db = initialize_database(client, "database")
 
     if db is not None:
         thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
@@ -91,7 +93,10 @@ def delete():
     """
     delete gesture database
     """
-    db = initialize_database()
+    client = pymongo.MongoClient(
+        "mongodb://localhost:27017"
+    )
+    db = initialize_database(client,"database")
 
     if db is not None and db.gestures is not None:
         db.gestures.delete_many({})
