@@ -5,6 +5,11 @@ Testing machine learning
 # pylint: disable=C0413
 # pylint: disable=C0305
 # pylint: disable=W0621
+#pylint: disable=C0116
+#pylint: disable=E0401
+#pylint: disable=C0303
+
+
 import sys
 import numpy as np
 import pytest
