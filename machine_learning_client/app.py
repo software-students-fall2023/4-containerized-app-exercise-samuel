@@ -16,10 +16,8 @@ import base64
 import mediapipe as mp
 import tensorflow as tf
 import numpy as np
-from io import BytesIO
-from pymongo.mongo_client import MongoClient
 from flask_cors import CORS
-from flask import Flask, Response, request, jsonify, send_file
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -28,10 +26,16 @@ CORS(app)
 
 @app.route("/")
 def hello():
+    """
+    index page
+    """
     return "hello"
 
 
 def initialize_database():
+    """
+    initialize a db
+    """
     client = pymongo.MongoClient("mongodb://mongodb:27017")
     print("CLIENT : ", client)
     db = client["database"]
@@ -140,6 +144,9 @@ model = load_gesture_model()
 class_names = load_class_names()
 
 def decode_image_from_json(json_data):
+    """
+    decode image
+    """
     try:
         data = json_data
         if not data or "image" not in data:
@@ -154,6 +161,9 @@ def decode_image_from_json(json_data):
         return None
 
 def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
+    """
+    generate frames
+    """
     processed_frame = process_frame(frame, hands,
                                     mp_hands, mp_draw, model, class_names, db_connection)
     if processed_frame is None:
@@ -165,6 +175,9 @@ def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_name
 
 @app.route("/test", methods=["POST"])
 def test():
+    """
+    test
+    """
     try:
         json_data = request.get_json()
         if json_data and "image" in json_data:
