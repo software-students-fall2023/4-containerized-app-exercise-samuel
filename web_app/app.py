@@ -196,7 +196,7 @@ def secondary_rock():
 @app.route("/secondarySnail", methods=["GET"])
 def secondary_snail():
     """
-    Secondary route for redundency 
+    Secondary route for redundency!
     """
     return render_template("stop.html")
 
