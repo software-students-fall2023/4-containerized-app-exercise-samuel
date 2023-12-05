@@ -110,6 +110,7 @@ def test():
     then redirect user to the corresponding route
     """
     gest = gesture_display()
+    print("Name: ", gest)
     if gest == "stop":
         return redirect(url_for("stop"))
     if gest == "thumbs up":
@@ -182,6 +183,13 @@ def stop():
 def rock():
     """
     Pulls a picture of a rock on closed fist gesture
+    """
+    return render_template("rock.html")
+
+@app.route("/tempRoute", methods=["GET"])
+def temp_route():
+    """
+    Just a temp funtion to pull a picture of rock
     """
     return render_template("rock.html")
 
