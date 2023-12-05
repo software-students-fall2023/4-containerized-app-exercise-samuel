@@ -1,5 +1,8 @@
-[![CI Badge](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/Main.yaml/badge.svg)](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/Main.yaml)
+[![ML CI](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/ml_tests.yml/badge.svg)](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/ml_tests.yml)
 
+[![Webb App CI](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/Main.yaml/badge.svg)](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/Main.yaml)
+
+[![check lint and format](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/lint.yml/badge.svg)](https://github.com/software-students-fall2023/4-containerized-app-exercise-samuel/actions/workflows/lint.yml)
 
 # Real-Time Hand Gesture Recognition Webapp
 
