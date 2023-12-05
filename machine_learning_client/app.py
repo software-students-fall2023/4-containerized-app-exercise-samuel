@@ -154,8 +154,9 @@ def decode_image_from_json(json_data):
         return None
 
 def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
-    processed_frame = process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
-    if(processed_frame is None):
+    processed_frame = process_frame(frame, hands,
+                                    mp_hands, mp_draw, model, class_names, db_connection)
+    if processed_frame is None:
         return None
     _, buffer = cv2.imencode('.jpg', processed_frame)
     frame_bytes = buffer.tobytes()
@@ -164,20 +165,23 @@ def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_name
 
 @app.route("/test", methods=["POST"])
 def test():
-    try: 
+    try:
         json_data = request.get_json()
         if json_data and "image" in json_data:
             frame = decode_image_from_json(json_data)
-            if(frame is None):
+            if frame is None:
                 return jsonify({"error": "Error decoding image"}), 500
             frame_bytes = generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
-            if(frame_bytes is None):
+            if frame_bytes is None:
                 return jsonify({"error": "Error processing image"}), 500
             processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
-            return jsonify({"success": True, "message": "Successfully processed image", "processed_image": processed_image_base64}), 200
+            return jsonify({"success": True,
+                            "message": "Successfully processed image",
+                            "processed_image": processed_image_base64}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9090, debug=True)
+    
