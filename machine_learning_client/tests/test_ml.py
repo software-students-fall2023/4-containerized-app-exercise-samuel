@@ -114,5 +114,5 @@ def test_process_frame_with_landmarks(
 
 def test_decode_image_from_json_no_data():
     result = app.decode_image_from_json(None)
-    assert result is None
+    assert result == ("No image data", 400)
 
