@@ -1,6 +1,9 @@
 # mac junk
 .DS_Store
 
+#DB folder 
+/database/
+
 # visual studio code junk
 .vscode/
 .vscode/settings.json

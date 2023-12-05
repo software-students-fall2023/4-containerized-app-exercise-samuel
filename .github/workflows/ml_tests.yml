@@ -1,0 +1,31 @@
+name: ML CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.9", "3.11"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            pip install --user pipenv
+            pipenv --python ${{ matrix.python-version }}
+            pipenv install pytest
+            pipenv install pytest-cov --dev
+            pipenv install
+      - name: Turn on 'editable' mode
+        run: |
+          pipenv install -e .
+      - name: Test with pytest
+        run: |
+          cd $GITHUB_WORKSPACE/machine_learning_client
+          pipenv run python -m pytest
+          pipenv run python -m pytest --cov=. --cov-report xml --cov-fail-under=80
