@@ -4,26 +4,26 @@ Tests to check the front end routes are working correctly.
 # pylint: disable=W0621
 # pylint: disable=C0413
 # pylint: disable=E0401
+# pylint: disable=R1714
 
 import sys
+from unittest.mock import Mock
 import pytest
-from unittest.mock import patch
-from unittest.mock import MagicMock
 import pymongo
-from pymongo.mongo_client import MongoClient
-from pymongo.database import Database
 
 
 sys.path.append("..")
 
-from app import app, initialize_database
+from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
 
 @pytest.fixture
 def mocker():
-    from unittest.mock import Mock
+    """
+    Mocker
+    """
 
     return Mock()
 
@@ -36,6 +36,7 @@ def client():
     app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
+
 
 def test_hello_route(client):
     """
@@ -90,7 +91,7 @@ def test_camera(client):
     Test the camera route. The camera route redirects to the hello route
     """
     response = client.get("/camera")
-    assert response.status_code == 200
+    assert response.status_code == 200 or response.status_code == 302
 
 
 def test_delete_route(client):
@@ -115,3 +116,36 @@ def test_initialize_database():
     """
     db_connection = initialize_database()
     assert isinstance(db_connection, pymongo.MongoClient) or db_connection is None
+
+
+def test_gesture_display(client):
+    """
+    Test for the gesture display function
+    """
+    response = gesture_display()
+    response_followed = client.get(response.location)
+    assert response_followed.status_code == 200
+
+
+def test_secondary_rock(client):
+    """
+    Testing secondary rock route
+    """
+    response = client.get("/secondaryRock")
+    assert response.status_code == 200
+
+
+def test_secondary_snail(client):
+    """
+    Testing secondary snail route
+    """
+    response = client.get("/secondarySnail")
+    assert response.status_code == 200
+
+
+def test_secondary_churchil(client):
+    """
+    Testing secondary churchil route
+    """
+    response = client.get("/secondaryChurchil")
+    assert response.status_code == 200
