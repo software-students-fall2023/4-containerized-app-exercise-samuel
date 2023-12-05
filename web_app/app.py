@@ -178,7 +178,7 @@ def stop():
 @app.route("/rock", methods=["GET"])
 def rock():
     """
-    Pulls a picture of a rock on closed fist gesture
+    Pull a picture of a rock on fist gesture
     """
     return render_template("rock.html")
 
