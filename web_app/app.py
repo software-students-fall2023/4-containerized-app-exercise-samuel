@@ -110,7 +110,6 @@ def test():
     then redirect user to the corresponding route
     """
     gest = gesture_display()
-    print("Name: ", gest)
     if gest == "stop":
         return redirect(url_for("stop"))
     if gest == "thumbs up":
