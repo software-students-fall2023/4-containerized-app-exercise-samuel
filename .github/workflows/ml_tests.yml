@@ -1,4 +1,4 @@
-name: CI Badge
+name: ML CI
 on: [push]
 jobs:
   build:
