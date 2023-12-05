@@ -39,6 +39,11 @@ Our project is a Real-Time Hand Gesture Recognition Webapp. The web application 
     ```bash
     docker-compose up --build
     ```
+5. **Adjust mediapipe package in requirements.txt to match your python version**
+
+   ```bash
+   latest: mediapipe==0.10.8
+   ```
 
 5. **Access the web-app:**
    
