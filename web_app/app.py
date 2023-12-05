@@ -8,10 +8,13 @@ Front end web page routes
 # pylint: disable=W1510
 # pylint: disable=E0401
 # pylint: disable=R0801
+# pylint: disable=C0103
+# pylint: disable=W1203
+
 import os
 import sys
 import requests
-import pymongo
+from pymongo.mongo_client import MongoClient
 from flask import Flask, render_template, redirect, url_for
 from flask_cors import CORS
 
@@ -35,7 +38,8 @@ def initialize_database():
     Initializes the database connection and returns the db connection object
     """
     try:
-        client = pymongo.MongoClient("mongodb://mongodb:27017")
+        local_uri = "mongodb://mongodb:27017"
+        client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
         db_connection = client["database"]
         print("Connected to the DB")
@@ -44,13 +48,13 @@ def initialize_database():
         print(f"Error connecting to local MongoDB: {e}")
         return None
 
-
 def gesture_display():
     """
     aggregate the frequency of each gesture
     find the gesture with the most frequency and return
     """
     db = initialize_database()
+
 
     if db is not None:
         thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
@@ -83,7 +87,7 @@ def gesture_display():
         )
 
         return GESTURES_ARR[max_obj["id"]]
-    return redirect(url_for("hello"))
+    return redirect("/")
 
 
 @app.route("/delete")
@@ -119,18 +123,19 @@ def test():
         return redirect(url_for("victory"))
     if gest == "rock":
         return redirect(url_for("victory"))
+
     return redirect(url_for("hello"))
 
 
-@app.route("/camera")
+@app.route('/camera')
 def camera():
     """
-    trigger camera
+    Activate camera route
     """
     try:
         return render_template("video.html")
     except requests.RequestException as e:
-        app.logger.error("An error occurred: %s", str(e))
+        app.logger.error(f"An error occurred: {str(e)}")
         return f"An error occurred: {str(e)}"
 
 
@@ -177,10 +182,30 @@ def stop():
 @app.route("/rock", methods=["GET"])
 def rock():
     """
-    Pull a picture of a rock on fist gesture
+    Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
 
+@app.route("/secondaryRock", methods=["GET"])
+def secondary_rock():
+    """
+    Secondary route for redundency
+    """
+    return render_template("rock.html")
+
+@app.route("/secondarySnail", methods=["GET"])
+def secondary_snail():
+    """
+    Secondary route for redundency!
+    """
+    return render_template("stop.html")
+
+@app.route("/secondaryChurchil", methods=["GET"])
+def secondary_churchil():
+    """
+    Secondary route for redundency!
+    """
+    return render_template("victory.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
