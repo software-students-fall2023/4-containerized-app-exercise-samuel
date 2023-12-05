@@ -3,12 +3,11 @@ Testing machine learning
 """
 # pylint: disable=C0411
 # pylint: disable=C0413
+# pylint: disable=C0305
+# pylint: disable=W0621
 import sys
-import os 
-from pymongo import MongoClient
 import numpy as np
 import pytest
-import json
 from machine_learning_client import app
 
 sys.path.append("..")
@@ -39,11 +38,13 @@ def mock_model():
 def mock_db_connection():
     return Mock()
 
+
 @pytest.fixture
 def mock_load_model(monkeypatch):
     mock = Mock()
     monkeypatch.setattr("tensorflow.keras.models.load_model", mock)
     return mock
+
 
 def test_load_class_name():
     """
@@ -113,6 +114,8 @@ def test_process_frame_with_landmarks(
 
 
 def test_decode_image_from_json_no_data():
+    """
+    Test the returned error message and status code from the function
+    """
     result = app.decode_image_from_json(None)
     assert result == ("No image data", 400)
-
