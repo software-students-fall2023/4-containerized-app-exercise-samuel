@@ -16,10 +16,8 @@ import base64
 import mediapipe as mp
 import tensorflow as tf
 import numpy as np
-from io import BytesIO
-from pymongo.mongo_client import MongoClient
 from flask_cors import CORS
-from flask import Flask, Response, request, jsonify, send_file
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -28,10 +26,16 @@ CORS(app)
 
 @app.route("/")
 def hello():
+    """
+    Index page
+    """
     return "hello"
 
 
 def initialize_database():
+    """
+    Initialize a db
+    """
     client = pymongo.MongoClient("mongodb://mongodb:27017")
     print("CLIENT : ", client)
     db = client["database"]
@@ -127,19 +131,22 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
     return frame
 
 # Declare global variables
-mp_hands = None
-hands = None
-mp_draw = None
-model = None
-class_names = None
-db_connection = None
+MP_HANDS = None
+HANDS = None
+MP_DRAW = None
+MODEL = None
+CLASS_NAMES = None
+DB_CONNECTION = None
 
-db_connection = initialize_database()
-mp_hands, hands, mp_draw = initialize_hand_tracking()
-model = load_gesture_model()
-class_names = load_class_names()
+DB_CONNECTION = initialize_database()
+MP_HANDS, HANDS, MP_DRAW = initialize_hand_tracking()
+MODEL = load_gesture_model()
+CLASS_NAMES = load_class_names()
 
 def decode_image_from_json(json_data):
+    """
+    decode image data
+    """
     try:
         data = json_data
         if not data or "image" not in data:
@@ -154,6 +161,9 @@ def decode_image_from_json(json_data):
         return None
 
 def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
+    """
+    Generate frames 
+    """
     processed_frame = process_frame(frame, hands,
                                     mp_hands, mp_draw, model, class_names, db_connection)
     if processed_frame is None:
@@ -165,13 +175,16 @@ def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_name
 
 @app.route("/test", methods=["POST"])
 def test():
+    """
+    Testing
+    """
     try:
         json_data = request.get_json()
         if json_data and "image" in json_data:
             frame = decode_image_from_json(json_data)
             if frame is None:
                 return jsonify({"error": "Error decoding image"}), 500
-            frame_bytes = generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
+            frame_bytes = generate_frames_from_json(frame, HANDS, MP_HANDS, MP_DRAW, MODEL, CLASS_NAMES, DB_CONNECTION)
             if frame_bytes is None:
                 return jsonify({"error": "Error processing image"}), 500
             processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
