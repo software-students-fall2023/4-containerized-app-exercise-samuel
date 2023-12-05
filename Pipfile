@@ -20,6 +20,7 @@ pytest = "*"
 pytest-mongo = "*"
 pip = "*"
 install = "*"
+Flask-Cors = "*"
 
 [dev-packages]
 

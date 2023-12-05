@@ -32,7 +32,7 @@ def hello():
 
 
 def initialize_database():
-    client = pymongo.MongoClient("mongodb://localhost:27017/")
+    client = pymongo.MongoClient("mongodb://mongodb:27017")
     print("CLIENT : ", client)
     db = client["database"]
     if db is None:
