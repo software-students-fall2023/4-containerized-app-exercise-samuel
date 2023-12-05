@@ -1,4 +1,3 @@
-
 """
 Gesture Recognition System
 """
@@ -10,20 +9,18 @@ Gesture Recognition System
 # pylint: disable=W0621
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
+# pylint: disable=R1710
+import base64
+import os
 import cv2
 import pymongo
-import base64
 import mediapipe as mp
-import os
 import tensorflow as tf
 import numpy as np
-from io import BytesIO
-from pymongo.mongo_client import MongoClient
 from flask_cors import CORS
-from flask import Flask, Response, request, jsonify, send_file
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
 CORS(app)
 
 if os.getenv("FLASK_ENV", "development") == "development":
@@ -31,28 +28,29 @@ if os.getenv("FLASK_ENV", "development") == "development":
 
 @app.route("/")
 def hello():
+    """
+    Index page
+    """
     return "hello"
 
-
 def initialize_database():
+    """
+    Initialize a db
+    """
     client = pymongo.MongoClient("mongodb://mongodb:27017")
-    print("CLIENT : ", client)
+    print("CLIENT:", client)
     db = client["database"]
     if db is None:
         print("db not connected")
     return db
 
-
 def load_class_name():
     """
     Initializes the gesture names and returns the list of gesture names
     """
-    with open(
-        "./mp_hand_gesture/gesture.names", "r", encoding="utf-8"
-    ) as file:
+    with open("./mp_hand_gesture/gesture.names", "r", encoding="utf-8") as file:
         class_names = file.read().split("\n")
     return class_names
-
 
 def initialize_hand_tracking():
     """
@@ -63,13 +61,11 @@ def initialize_hand_tracking():
     mp_draw = mp.solutions.drawing_utils
     return mp_hands, hands, mp_draw
 
-
 def load_gesture_model(model_path="./mp_hand_gesture"):
     """
     Loads the gesture model from the given path
     """
     return tf.keras.models.load_model(model_path)
-
 
 def load_class_names(file_path="./mp_hand_gesture/gesture.names"):
     """
@@ -77,7 +73,6 @@ def load_class_names(file_path="./mp_hand_gesture/gesture.names"):
     """
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read().split("\n")
-
 
 def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
     """
@@ -130,19 +125,22 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
     return frame
 
 # Declare global variables
-mp_hands = None
-hands = None
-mp_draw = None
-model = None
-class_names = None
-db_connection = None
+MP_HANDS = None
+HANDS = None
+MP_DRAW = None
+MODEL = None
+CLASS_NAMES = None
+DB_CONNECTION = None
 
-db_connection = initialize_database()
-mp_hands, hands, mp_draw = initialize_hand_tracking()
-model = load_gesture_model()
-class_names = load_class_names()
+DB_CONNECTION = initialize_database()
+MP_HANDS, HANDS, MP_DRAW = initialize_hand_tracking()
+MODEL = load_gesture_model()
+CLASS_NAMES = load_class_names()
 
 def decode_image_from_json(json_data):
+    """
+    Decode image
+    """
     try:
         data = json_data
         if not data or "image" not in data:
@@ -157,8 +155,11 @@ def decode_image_from_json(json_data):
         return None
 
 def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
-    processed_frame = process_frame(frame, hands,
-                                    mp_hands, mp_draw, model, class_names, db_connection)
+    """
+    Generate frames
+    """
+    processed_frame = process_frame(frame, hands, mp_hands,
+    mp_draw, model, class_names, db_connection)
     if processed_frame is None:
         return None
     _, buffer = cv2.imencode('.jpg', processed_frame)
@@ -168,23 +169,33 @@ def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_name
 
 @app.route("/test", methods=["POST"])
 def test():
+    """
+    Testing route for gesture recognition
+    """
     try:
         json_data = request.get_json()
         if json_data and "image" in json_data:
             frame = decode_image_from_json(json_data)
             if frame is None:
                 return jsonify({"error": "Error decoding image"}), 500
-            frame_bytes = generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
+            frame_bytes = generate_frames_from_json(frame, 
+            HANDS, MP_HANDS, MP_DRAW, MODEL, CLASS_NAMES, DB_CONNECTION)
             if frame_bytes is None:
                 return jsonify({"error": "Error processing image"}), 500
             processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
-            return jsonify({"success": True,
-                            "message": "Successfully processed image",
-                            "processed_image": processed_image_base64}), 200
+            return (
+                jsonify(
+                    {
+                        "success": True,
+                        "message": "Successfully processed image",
+                        "processed_image": processed_image_base64,
+                    }
+                ),
+                200,
+            )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9090, debug=True)
-    
