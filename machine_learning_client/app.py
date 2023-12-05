@@ -14,6 +14,7 @@ import cv2
 import pymongo
 import base64
 import mediapipe as mp
+import os
 import tensorflow as tf
 import numpy as np
 from io import BytesIO
@@ -25,6 +26,8 @@ app = Flask(__name__)
 
 CORS(app)
 
+if os.getenv("FLASK_ENV", "development") == "development":
+    app.debug = True
 
 @app.route("/")
 def hello():
