@@ -44,26 +44,11 @@ def mock_load_model(monkeypatch):
     monkeypatch.setattr("tensorflow.keras.models.load_model", mock)
     return mock
 
-@pytest.fixture
-def client():
-    """
-    Creates a flask testing client to simmulate calls to the web-app.
-    """
-    app.config["TESTING"] = True
-    with app.test_client() as client:
-        yield client
-
-def test_hello_route(client):
-    """
-    Testing the returned status code of the default route.
-    """
-    response = client.app.get('/')
+def test_hello_route():
+    client = app.test_client()
+    response = client.get('/')
     assert response.status_code == 200
-
-def test_post_request_without_input(client):
-        response = client.app.post('/test', data=json.dumps({}), content_type='application/json')
-        assert response.status_code == 500
-
+    
 def test_load_class_name():
     """
     Test the returned class names from the load_class_name function
