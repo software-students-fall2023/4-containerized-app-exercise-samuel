@@ -4,6 +4,7 @@ Tests to check the front end routes are working correctly.
 # pylint: disable=W0621
 # pylint: disable=C0413
 # pylint: disable=E0401
+# pylint: disable=R1714
 
 import sys
 from unittest.mock import Mock
@@ -117,7 +118,7 @@ def test_initialize_database():
     assert isinstance(db_connection, pymongo.MongoClient) or db_connection is None
 
 
-def test_gesture_display(client): 
+def test_gesture_display(client):
     """
     Test for the gesture display function
     """
