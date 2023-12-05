@@ -13,7 +13,7 @@ import pymongo
 
 sys.path.append("..")
 
-from app import app, initialize_database
+from app import app, initialize_database, gesture_display
 
 # KEY - RUN WITH: python -m pytest
 
@@ -115,3 +115,12 @@ def test_initialize_database():
     """
     db_connection = initialize_database()
     assert isinstance(db_connection, pymongo.MongoClient) or db_connection is None
+
+
+def test_gesture_display(client): 
+    """
+    Test for the gesture display function
+    """
+    response = gesture_display()
+    response_followed = client.get(response.location)
+    assert response_followed.status_code == 200
