@@ -12,8 +12,9 @@ import os
 import sys
 import requests
 from pymongo.mongo_client import MongoClient
-from flask import Flask, render_template, redirect, url_for
-
+from flask import Flask, render_template, redirect, url_for, request, jsonify
+import sys
+from flask_cors import CORS
 
 sys.path.append("../")
 
@@ -21,6 +22,8 @@ sys.path.append("../")
 GESTURES_ARR = ["thumbs up", "thumbs down", "fist", "stop", "peace", "rock"]
 
 app = Flask(__name__)
+CORS(app) 
+
 app.secret_key = os.urandom(24)
 
 
@@ -33,11 +36,10 @@ def initialize_database():
     Initializes the database connection and returns the db connection object
     """
     try:
-        local_uri = "mongodb://localhost:27017/"
+        local_uri = "mongodb://localhost:27017"
         client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
         db_connection = client["database"]
-
         print("Connected to the DB")
         return db_connection
     except Exception as e:
@@ -125,9 +127,8 @@ def test():
 
 @app.route('/camera')
 def camera():
-    ml_client_url = 'http://localhost:5002/camera'  
     try:
-        return redirect(ml_client_url)
+        return render_template("video.html")
     except requests.RequestException as e:
         app.logger.error(f"An error occurred: {str(e)}")
         return f"An error occurred: {str(e)}"
@@ -179,3 +180,6 @@ def rock():
     Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5002, debug=True)

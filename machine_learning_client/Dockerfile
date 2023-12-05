@@ -5,8 +5,10 @@ WORKDIR /machine_learning_client
 COPY machine_learning_client/ ./
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt && apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+    && pip install -r requirements.txt && \
+    apt-get install -y libgl1-mesa-glx && \
+    pip install opencv-python-y
 
-EXPOSE 80
+EXPOSE 9090
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]

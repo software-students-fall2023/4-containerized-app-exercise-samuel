@@ -17,11 +17,14 @@ services:
       context: .
       dockerfile: ./machine_learning_client/Dockerfile
     ports:
-      - "80:80"
+      - "9090:5000"
     depends_on:
       - mongodb
     environment:
       FLASK_APP: machine_learning_client/app.py
+    devices:
+      - "/dev/video0:/dev/video0"
+    privileged: true  
 
   mongodb:
     image: mongo

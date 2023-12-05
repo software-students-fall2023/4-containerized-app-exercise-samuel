@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 ADD . .
 
-EXPOSE 8000
+EXPOSE 8080
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
 
