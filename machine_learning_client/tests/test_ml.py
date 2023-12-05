@@ -53,16 +53,16 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_hello_route(self):
+def test_hello_route(client):
     """
     Testing the returned status code of the default route.
     """
-    response = self.app.get('/')
+    response = client.app.get('/')
     assert response.status_code == 200
 
-def test_post_request_without_input(self):
-        response = self.app.post('/test', data=json.dumps({}), content_type='application/json')
-        self.assertEqual(response.status_code, 500)
+def test_post_request_without_input(client):
+        response = client.app.post('/test', data=json.dumps({}), content_type='application/json')
+        assert response.status_code == 500
 
 def test_load_class_name():
     """
