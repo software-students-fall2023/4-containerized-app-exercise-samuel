@@ -8,6 +8,7 @@ Front end web page routes
 # pylint: disable=W1510
 # pylint: disable=E0401
 # pylint: disable=R0801
+# pylint: disable=C0303
 import os
 import sys
 import requests
