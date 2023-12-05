@@ -7,6 +7,7 @@ import sys
 from pymongo import MongoClient
 import numpy as np
 import pytest
+import json
 from machine_learning_client import app
 
 sys.path.append("..")
@@ -43,6 +44,25 @@ def mock_load_model(monkeypatch):
     monkeypatch.setattr("tensorflow.keras.models.load_model", mock)
     return mock
 
+@pytest.fixture
+def client():
+    """
+    Creates a flask testing client to simmulate calls to the web-app.
+    """
+    app.config["TESTING"] = True
+    with app.test_client() as client:
+        yield client
+
+def test_hello_route(self):
+    """
+    Testing the returned status code of the default route.
+    """
+    response = self.app.get('/')
+    assert response.status_code == 200
+
+def test_post_request_without_input(self):
+        response = self.app.post('/test', data=json.dumps({}), content_type='application/json')
+        self.assertEqual(response.status_code, 500)
 
 def test_load_class_name():
     """
@@ -109,3 +129,5 @@ def test_process_frame_with_landmarks(
     )
     assert mock_model.predict.called_once_with([[[10, 20], [30, 40]]])
     assert result_frame is not None
+
+
