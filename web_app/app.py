@@ -12,9 +12,7 @@ import os
 import sys
 import requests
 import pymongo
-from pymongo.mongo_client import MongoClient
-from flask import Flask, render_template, redirect, url_for, request, jsonify
-import sys
+from flask import Flask, render_template, redirect, url_for
 from flask_cors import CORS
 
 sys.path.append("../")
@@ -23,7 +21,7 @@ sys.path.append("../")
 GESTURES_ARR = ["thumbs up", "thumbs down", "fist", "stop", "peace", "rock"]
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app)
 
 app.secret_key = os.urandom(24)
 
@@ -124,12 +122,15 @@ def test():
     return redirect(url_for("hello"))
 
 
-@app.route('/camera')
+@app.route("/camera")
 def camera():
+    """
+    trigger camera
+    """
     try:
         return render_template("video.html")
     except requests.RequestException as e:
-        app.logger.error(f"An error occurred: {str(e)}")
+        app.logger.error("An error occurred: %s", str(e))
         return f"An error occurred: {str(e)}"
 
 
@@ -179,6 +180,7 @@ def rock():
     Pulls a picture of a rock on closed fist gesture
     """
     return render_template("rock.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
