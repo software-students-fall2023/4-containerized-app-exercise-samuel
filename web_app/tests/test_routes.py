@@ -130,6 +130,5 @@ def test_temp(client):
     """
     Just a temp function 
     """
-    response = client.get("/temp")
+    response = client.get("/tempRoute")
     assert response.status_code == 200
-    
