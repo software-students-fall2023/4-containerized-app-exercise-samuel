@@ -4,6 +4,7 @@ Testing machine learning
 # pylint: disable=C0411
 # pylint: disable=C0413
 import sys
+import os 
 from pymongo import MongoClient
 import numpy as np
 import pytest
@@ -44,11 +45,6 @@ def mock_load_model(monkeypatch):
     monkeypatch.setattr("tensorflow.keras.models.load_model", mock)
     return mock
 
-def test_hello_route():
-    client = app.test_client()
-    response = client.get('/')
-    assert response.status_code == 200
-    
 def test_load_class_name():
     """
     Test the returned class names from the load_class_name function
@@ -115,4 +111,8 @@ def test_process_frame_with_landmarks(
     assert mock_model.predict.called_once_with([[[10, 20], [30, 40]]])
     assert result_frame is not None
 
+
+def test_decode_image_from_json_no_data():
+    result = app.decode_image_from_json(None)
+    assert result is None
 
