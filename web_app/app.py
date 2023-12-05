@@ -48,13 +48,13 @@ def initialize_database():
         print(f"Error connecting to local MongoDB: {e}")
         return None
 
+
 def gesture_display():
     """
     aggregate the frequency of each gesture
     find the gesture with the most frequency and return
     """
     db = initialize_database()
-
 
     if db is not None:
         thumb_up = db.gestures.count_documents({"gesture": "thumbs up"})
@@ -127,7 +127,7 @@ def test():
     return redirect(url_for("hello"))
 
 
-@app.route('/camera')
+@app.route("/camera")
 def camera():
     """
     Activate camera route
@@ -186,12 +186,14 @@ def rock():
     """
     return render_template("rock.html")
 
+
 @app.route("/secondaryRock", methods=["GET"])
 def secondary_rock():
     """
     Secondary route for redundency
     """
     return render_template("rock.html")
+
 
 @app.route("/secondarySnail", methods=["GET"])
 def secondary_snail():
@@ -200,12 +202,14 @@ def secondary_snail():
     """
     return render_template("stop.html")
 
+
 @app.route("/secondaryChurchil", methods=["GET"])
 def secondary_churchil():
     """
     Secondary route for redundency!
     """
     return render_template("victory.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
