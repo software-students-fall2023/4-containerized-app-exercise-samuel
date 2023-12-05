@@ -37,7 +37,6 @@ def client():
     with app.test_client() as client:
         yield client
 
-
 def test_hello_route(client):
     """
     Testing the returned status code of the default route.
@@ -91,7 +90,7 @@ def test_camera(client):
     Test the camera route. The camera route redirects to the hello route
     """
     response = client.get("/camera")
-    assert response.status_code == 302
+    assert response.status_code == 200
 
 
 def test_delete_route(client):

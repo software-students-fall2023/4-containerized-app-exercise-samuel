@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gesture Recognition Camera</title>
+  <style>
+   
+  </style>
+</head>
+<body>
+  <h1>Gesture Recognition Camera Feed</h1>
+  <video id="video_feed" autoplay></video>
+  <img id="captured_image" />
+  <div>
+    <button onclick="startCapture()">Start Capture</button>
+    <button onclick="stopCapture()">Stop Capture</button>
+  </div>
+  <div id="result"></div>
+  <script>
+    var video = document.querySelector("#video_feed");
+    var intervalId;
+
+    // Get user media and set up the video stream
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function (stream) {
+        video.srcObject = stream;
+      })
+      .catch(function (error) {
+        console.error('Error accessing camera:', error);
+      });
+
+    function captureImage() {
+        var canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL();
+    }
+
+    function sendImage(imageData) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:9090/test", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var data = JSON.parse(xhr.responseText);
+          displayResult(data);
+        }
+      };
+      xhr.send(JSON.stringify({ image: imageData }));
+    }
+
+    function startCapture() {
+      intervalId = setInterval(function() {
+        var imageData = captureImage();
+        sendImage(imageData);
+      }, 1000); 
+    }
+
+    function stopCapture() {
+      clearInterval(intervalId);
+    }
+
+  function displayResult(data) {
+    var resultDiv = document.getElementById("result");
+    if (data.message === "Successfully processed image") {
+      var imgElement = document.createElement("img");
+      imgElement.src = "data:image/jpeg;base64," + data.processed_image;
+      resultDiv.innerHTML = "";
+      resultDiv.appendChild(imgElement);
+    } else {
+      console.error("Error processing image");
+      resultDiv.innerHTML = "Error processing image";
+    }
+  }
+  </script>
+</body>
+</html>

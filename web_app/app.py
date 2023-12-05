@@ -8,12 +8,13 @@ Front end web page routes
 # pylint: disable=W1510
 # pylint: disable=E0401
 # pylint: disable=R0801
+# pylint: disable=C0303
 import os
 import sys
-import subprocess
-from pymongo.mongo_client import MongoClient
+import requests
+import pymongo
 from flask import Flask, render_template, redirect, url_for
-
+from flask_cors import CORS
 
 sys.path.append("../")
 
@@ -21,6 +22,8 @@ sys.path.append("../")
 GESTURES_ARR = ["thumbs up", "thumbs down", "fist", "stop", "peace", "rock"]
 
 app = Flask(__name__)
+CORS(app)
+
 app.secret_key = os.urandom(24)
 
 
@@ -33,11 +36,9 @@ def initialize_database():
     Initializes the database connection and returns the db connection object
     """
     try:
-        local_uri = "mongodb://mongodb:27017"
-        client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
+        client = pymongo.MongoClient("mongodb://mongodb:27017")
         client.admin.command("ping")
         db_connection = client["database"]
-
         print("Connected to the DB")
         return db_connection
     except Exception as e:
@@ -119,22 +120,18 @@ def test():
         return redirect(url_for("victory"))
     if gest == "rock":
         return redirect(url_for("victory"))
-
     return redirect(url_for("hello"))
 
 
 @app.route("/camera")
 def camera():
     """
-    trigger the machine learning client and camera
+    trigger camera
     """
     try:
-        file_path = "../machine_learning_client/setup.py"
-        print(file_path)
-        subprocess.run(["python", file_path])
-        return redirect(url_for("hello"))
-
-    except Exception as e:
+        return render_template("video.html")
+    except requests.RequestException as e:
+        app.logger.error("An error occurred: %s", str(e))
         return f"An error occurred: {str(e)}"
 
 
@@ -181,6 +178,10 @@ def stop():
 @app.route("/rock", methods=["GET"])
 def rock():
     """
-    Pulls a picture of a rock on closed fist gesture
+    Pull a picture of a rock on fist gesture
     """
     return render_template("rock.html")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5002, debug=True)

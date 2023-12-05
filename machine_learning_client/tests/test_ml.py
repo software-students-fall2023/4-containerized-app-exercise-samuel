@@ -3,11 +3,12 @@ Testing machine learning
 """
 # pylint: disable=C0411
 # pylint: disable=C0413
+# pylint: disable=C0305
+# pylint: disable=W0621
 import sys
-from pymongo import MongoClient
 import numpy as np
 import pytest
-from machine_learning_client import setup
+from machine_learning_client import app
 
 sys.path.append("..")
 from unittest.mock import patch, Mock
@@ -38,14 +39,6 @@ def mock_db_connection():
     return Mock()
 
 
-def test_initialize_database_timeout_error():
-    invalid_uri = "mongodb://invalid_uri"
-    client = MongoClient(invalid_uri)
-    database_name = "test_db"
-    db_connection = setup.initialize_database(client, database_name)
-    assert db_connection is None
-
-
 @pytest.fixture
 def mock_load_model(monkeypatch):
     mock = Mock()
@@ -61,7 +54,7 @@ def test_load_class_name():
         mock_open.return_value.__enter__.return_value.read.return_value = (
             "gesture1\ngesture2"
         )
-        class_names = setup.load_class_name()
+        class_names = app.load_class_name()
         assert class_names == ["gesture1", "gesture2"]
 
 
@@ -70,7 +63,7 @@ def test_initialize_hand_tracking():
     Test the returned hand tracking model and drawing
     utility from the initialize_hand_tracking function
     """
-    mp_hands, hands, mp_draw = setup.initialize_hand_tracking()
+    mp_hands, hands, mp_draw = app.initialize_hand_tracking()
     assert mp_hands is not None
     assert hands is not None
     assert mp_draw is not None
@@ -82,7 +75,7 @@ def test_load_gesture_model_success(mock_load_model):
     """
     expected_model = Mock()
     mock_load_model.return_value = expected_model
-    result = setup.load_gesture_model("mock_path")
+    result = app.load_gesture_model("mock_path")
     assert result == expected_model
     mock_load_model.assert_called_once_with("mock_path")
 
@@ -103,7 +96,7 @@ def test_process_frame_with_landmarks(
     ]
     mock_hands.process.return_value = mock_result
     mock_model.predict.return_value = np.array([[0.1, 0.2, 0.3, 0.4, 0.5, 0.6]])
-    result_frame = setup.process_frame(
+    result_frame = app.process_frame(
         frame,
         mock_hands,
         mock_mp_hands,
@@ -118,3 +111,11 @@ def test_process_frame_with_landmarks(
     )
     assert mock_model.predict.called_once_with([[[10, 20], [30, 40]]])
     assert result_frame is not None
+
+
+def test_decode_image_from_json_no_data():
+    """
+    Test the returned error message and status code from the function
+    """
+    result = app.decode_image_from_json(None)
+    assert result == ("No image data", 400)
