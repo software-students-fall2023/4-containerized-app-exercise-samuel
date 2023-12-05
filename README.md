@@ -49,5 +49,16 @@ Our project is a Real-Time Hand Gesture Recognition Webapp. The web application 
    
     Open your web browser and go to [http://localhost:5002](http://localhost:5002).
 
+### Optional: Pull from the latest hosted images
+```
+docker pull samuelshally/4-containerized-app-exercise-samuel-web_app:latest
+
+docker pull samuelshally/4-containerized-app-exercise-samuel-machine_learning_client:latest
+
+docker pull samuelshally/mongo:latest
+```
+
+
+
 
   
