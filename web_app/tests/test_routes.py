@@ -125,3 +125,11 @@ def test_gesture_display(client):
     response = gesture_display()
     response_followed = client.get(response.location)
     assert response_followed.status_code == 200
+
+def test_temp(client):
+    """
+    Just a temp function 
+    """
+    response = client.get("/temp")
+    assert response.status_code == 200
+    
