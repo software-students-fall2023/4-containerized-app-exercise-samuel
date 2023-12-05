@@ -4,7 +4,7 @@ Testing machine learning
 # pylint: disable=C0411
 # pylint: disable=C0413
 import sys
-from pymongo import MongoClient
+
 import numpy as np
 import pytest
 from machine_learning_client import app
@@ -15,30 +15,48 @@ from unittest.mock import patch, Mock
 
 @pytest.fixture
 def mock_hands():
+    """
+    mock hands
+    """
     return Mock()
 
 
 @pytest.fixture
 def mock_mp_hands():
+    """
+    mock
+    """
     return Mock()
 
 
 @pytest.fixture
 def mock_mp_draw():
+    """
+    mock
+    """
     return Mock()
 
 
 @pytest.fixture
 def mock_model():
+    """
+    mock model
+    """
     return Mock()
 
 
 @pytest.fixture
 def mock_db_connection():
+    """
+    mock db
+    """
     return Mock()
 
 @pytest.fixture
 def mock_load_model(monkeypatch):
+    """
+    mock load model
+    """
     mock = Mock()
     monkeypatch.setattr("tensorflow.keras.models.load_model", mock)
     return mock
