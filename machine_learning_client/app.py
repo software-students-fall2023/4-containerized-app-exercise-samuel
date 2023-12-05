@@ -171,7 +171,8 @@ def test():
             frame = decode_image_from_json(json_data)
             if frame is None:
                 return jsonify({"error": "Error decoding image"}), 500
-            frame_bytes = generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
+            frame_bytes = generate_frames_from_json(frame, hands, mp_hands,
+                                                    mp_draw, model, class_names, db_connection)
             if frame_bytes is None:
                 return jsonify({"error": "Error processing image"}), 500
             processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
@@ -184,4 +185,5 @@ def test():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9090, debug=True)
+
     
