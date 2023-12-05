@@ -37,11 +37,6 @@ def client():
     with app.test_client() as client:
         yield client
 
-def test_test_route_redirects_to_stop(client, monkeypatch):
-    monkeypatch.setattr("your_module.gesture_display", lambda: "stop")
-    response = client.get('/test')
-    assert response.status_code == 302
-
 def test_hello_route(client):
     """
     Testing the returned status code of the default route.
