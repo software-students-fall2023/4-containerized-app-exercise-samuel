@@ -1,4 +1,4 @@
-name: CI Badge
+name: Webb App CI 
 on: [push]
 jobs:
   build:
