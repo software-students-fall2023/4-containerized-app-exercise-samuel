@@ -13,8 +13,6 @@ Gesture Recognition System
 # pylint: disable=C0303
 # pylint: disable=C0103
 
-
-
 import base64
 import os
 import cv2
