@@ -26,12 +26,14 @@ CORS(app)
 if os.getenv("FLASK_ENV", "development") == "development":
     app.debug = True
 
+
 @app.route("/")
 def hello():
     """
     Index page
     """
     return "hello"
+
 
 def initialize_database():
     """
@@ -44,6 +46,7 @@ def initialize_database():
         print("db not connected")
     return db
 
+
 def load_class_name():
     """
     Initializes the gesture names and returns the list of gesture names
@@ -51,6 +54,7 @@ def load_class_name():
     with open("./mp_hand_gesture/gesture.names", "r", encoding="utf-8") as file:
         class_names = file.read().split("\n")
     return class_names
+
 
 def initialize_hand_tracking():
     """
@@ -61,11 +65,13 @@ def initialize_hand_tracking():
     mp_draw = mp.solutions.drawing_utils
     return mp_hands, hands, mp_draw
 
+
 def load_gesture_model(model_path="./mp_hand_gesture"):
     """
     Loads the gesture model from the given path
     """
     return tf.keras.models.load_model(model_path)
+
 
 def load_class_names(file_path="./mp_hand_gesture/gesture.names"):
     """
@@ -73,6 +79,7 @@ def load_class_names(file_path="./mp_hand_gesture/gesture.names"):
     """
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read().split("\n")
+
 
 def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
     """
@@ -124,6 +131,7 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
 
     return frame
 
+
 # Declare global variables
 MP_HANDS = None
 HANDS = None
@@ -136,6 +144,7 @@ DB_CONNECTION = initialize_database()
 MP_HANDS, HANDS, MP_DRAW = initialize_hand_tracking()
 MODEL = load_gesture_model()
 CLASS_NAMES = load_class_names()
+
 
 def decode_image_from_json(json_data):
     """
@@ -154,15 +163,19 @@ def decode_image_from_json(json_data):
         print(f"Error decoding image: {e}")
         return None
 
-def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
+
+def generate_frames_from_json(
+    frame, hands, mp_hands, mp_draw, model, class_names, db_connection
+):
     """
     Generate frames
     """
-    processed_frame = process_frame(frame, hands, mp_hands,
-    mp_draw, model, class_names, db_connection)
+    processed_frame = process_frame(
+        frame, hands, mp_hands, mp_draw, model, class_names, db_connection
+    )
     if processed_frame is None:
         return None
-    _, buffer = cv2.imencode('.jpg', processed_frame)
+    _, buffer = cv2.imencode(".jpg", processed_frame)
     frame_bytes = buffer.tobytes()
     return frame_bytes
 
@@ -178,8 +191,9 @@ def test():
             frame = decode_image_from_json(json_data)
             if frame is None:
                 return jsonify({"error": "Error decoding image"}), 500
-            frame_bytes = generate_frames_from_json(frame, 
-            HANDS, MP_HANDS, MP_DRAW, MODEL, CLASS_NAMES, DB_CONNECTION)
+            frame_bytes = generate_frames_from_json(
+                frame, HANDS, MP_HANDS, MP_DRAW, MODEL, CLASS_NAMES, DB_CONNECTION
+            )
             if frame_bytes is None:
                 return jsonify({"error": "Error processing image"}), 500
             processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
