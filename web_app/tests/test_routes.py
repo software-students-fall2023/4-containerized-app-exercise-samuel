@@ -7,7 +7,7 @@ Tests to check the front end routes are working correctly.
 
 import sys
 import pytest
-from unittest.mock import patch, monkeypatch
+from unittest.mock import patch
 from unittest.mock import MagicMock
 import pymongo
 from pymongo.mongo_client import MongoClient
