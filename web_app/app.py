@@ -15,6 +15,11 @@ from pymongo.mongo_client import MongoClient
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 import sys
 from flask_cors import CORS
+import numpy as np
+import cv2
+from io import BytesIO
+import base64
+
 
 sys.path.append("../")
 
@@ -181,5 +186,86 @@ def rock():
     """
     return render_template("rock.html")
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5002, debug=True)
+from flask import Flask, request, jsonify
+import cv2
+import numpy as np
+import base64
+from cvzone.HandTrackingModule import HandDetector  # Assuming this module is available in your environment
+
+@app.route("/rep", methods=["POST"])
+def rep():
+
+    print("got here")
+    try:
+        data = request.json
+        if not data or "frame" not in data:
+            print("no data")
+            return "No frame data", 400
+        
+        frame_data = data["frame"]
+        encoded_data = frame_data.split(",")[1]
+        nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        print("Image processing done")
+
+        # Example: Call the hand gesture function
+        gesture = get_hand_gesture(img)
+        
+        return jsonify(success=True, gesture=gesture)  # Sending a success response back to the frontend with gesture information
+    except Exception as e:
+        print(f"Error decoding image: {e}")
+        return jsonify(error=str(e)), 500  # Sending an error response back to the frontend
+
+def get_hand_gesture(image):
+    # Initialize HandDetector
+    print("INSIDE HAND GESTURE FUNCTION")
+    detector = HandDetector(detectionCon=0.8, maxHands=1)
+
+    # Process the image and get hand information
+    hands, _ = detector.findHands(image)
+
+    # Check for hand gestures
+    if hands:
+        # Access landmarks
+        landmarks = hands[0]['lmList']
+
+        # Calculate scores for each gesture
+
+        # Peace: If the index and middle fingers are extended and other fingers are closed
+        peace_score = int(landmarks[8][1] < landmarks[5][1] and landmarks[12][1] < landmarks[9][1])
+
+        # Thumbs Up: If the thumb is extended and other fingers are closed
+        thumbs_up_score = int(landmarks[4][1] < landmarks[3][1] < landmarks[2][1] < landmarks[1][1])
+
+        # Thumbs Down: If the thumb is extended and the rest are closed
+        thumbs_down_score = int(landmarks[4][1] > landmarks[3][1] > landmarks[2][1] > landmarks[1][1])
+
+        # Calculate total scores for each gesture
+        total_scores = {
+            "Peace": peace_score,
+            "Thumbs Up": thumbs_up_score,
+            "Thumbs Down": thumbs_down_score,
+        }
+
+        # Get the gesture with the highest score
+        detected_gesture = max(total_scores, key=total_scores.get)
+
+        # Print scores for debugging
+        print("Scores:", total_scores)
+
+        # Return the detected gesture
+        if total_scores[detected_gesture] > 0:
+            print(detected_gesture)
+            return detected_gesture
+
+    # No hand gestures detected
+    print("NO GESTURE")
+    return "No Gesture"
+
+
+@app.route("/temp")
+def temp():
+    """
+    the main page of the web app
+    """
+    return render_template("video.html")

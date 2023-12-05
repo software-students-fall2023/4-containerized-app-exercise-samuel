@@ -1,83 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gesture Recognition Camera</title>
-  <style>
-   
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Recognition Camera</title>
+    <style>
+        #video_feed, #captured_image {
+            width: 320px; /* Set the width of both video and captured image */
+            height: 240px; /* Set the height of both video and captured image */
+            margin-right: 10px; /* Add some margin between video and captured image */
+        }
+    </style>
 </head>
 <body>
-  <h1>Gesture Recognition Camera Feed</h1>
-  <video id="video_feed" autoplay></video>
-  <img id="captured_image" />
-  <div>
-    <button onclick="startCaptureInterval()">Start Capture Interval</button>
-    <button onclick="stopCaptureInterval()">Stop Capture Interval</button>
-  </div>
-  <div id="result"></div>
-  <script>
-    var video = document.querySelector("#video_feed");
-    var captureInterval;
+    <h1>Gesture Recognition Camera Feed</h1>
+    <div>
+        <video id="video_feed" autoplay></video>
+        <img id="captured_image">
+    </div>
+    <button onclick="takePicture()">Take Picture</button>
 
-    // Get user media and set up the video stream
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function (stream) {
-        video.srcObject = stream;
-      })
-      .catch(function (error) {
-        console.error('Error accessing camera:', error);
-      });
+    <script>
+        var video = document.getElementById('video_feed');
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        canvas.width = 320; // Set the width of the canvas
+        canvas.height = 240; // Set the height of the canvas
 
-    function captureImage() {
-        var canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        var ctx = canvas.getContext("2d");
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL();
-    }
+        // Access the user's camera and set the stream as the source for the video element
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.error('Error accessing the camera:', error);
+            });
 
-    function sendImage(imageData) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://localhost:9090/test", true);
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-          data = JSON.parse(xhr.responseText);
-          displayResult(data);
+        function takePicture() {
+            // Pause the video stream
+            video.pause();
+
+            // Draw the current frame on the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Get the image data from the canvas
+            var imageData = canvas.toDataURL('image/jpeg', 0.8);
+
+            // Set the source of the captured image element
+            var capturedImage = document.getElementById('captured_image');
+            capturedImage.src = imageData;
+
+            // Send the image data to Flask server
+            fetch('http://localhost:5002/rep', {
+                method: 'POST',
+                body: JSON.stringify({ frame: imageData }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error sending frame:', error));
+
+            // Resume the video stream after taking the picture
+            video.play();
         }
-      };
-      xhr.send(JSON.stringify({ image: imageData }));
-    }
-
-    function captureAndSend() {
-      var imageData = captureImage();
-      sendImage(imageData);
-    }
-
-    function startCaptureInterval() {
-      captureInterval = setInterval(captureAndSend, 0); 
-    }
-
-    function stopCaptureInterval() {
-      clearInterval(captureInterval);
-    }
-
-    // Function to display the image
-    function displayResult(data) {
-      var resultDiv = document.getElementById("result");
-      if (data.message === "Successfully processed image") {
-        var imgElement = document.createElement("img");
-        imgElement.src = "data:image/jpeg;base64," + data.processed_image;
-        resultDiv.innerHTML = "";
-        resultDiv.appendChild(imgElement);
-      } else {
-        console.error("Error processing image");
-        resultDiv.innerHTML = "Error processing image";
-      }
-    }
-  </script>
+    </script>
 </body>
 </html>
