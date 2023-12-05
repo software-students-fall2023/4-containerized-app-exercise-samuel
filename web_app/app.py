@@ -11,6 +11,7 @@ Front end web page routes
 import os
 import sys
 import requests
+import pymongo
 from pymongo.mongo_client import MongoClient
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 import sys
@@ -36,8 +37,7 @@ def initialize_database():
     Initializes the database connection and returns the db connection object
     """
     try:
-        local_uri = "mongodb://localhost:27017"
-        client = MongoClient(local_uri, serverSelectionTimeoutMS=5000)
+        client = pymongo.MongoClient("mongodb://mongodb:27017")
         client.admin.command("ping")
         db_connection = client["database"]
         print("Connected to the DB")
@@ -121,7 +121,6 @@ def test():
         return redirect(url_for("victory"))
     if gest == "rock":
         return redirect(url_for("victory"))
-
     return redirect(url_for("hello"))
 
 
