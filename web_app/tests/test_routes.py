@@ -139,4 +139,10 @@ def test_secondary_snail(client):
     """
     response = client.get("/secondarySnail")
     assert response.status_code == 200
-    
+
+def test_secondary_churchil(client):
+    """
+    Testing secondary churchil route
+    """
+    response = client.get("/secondaryChurchil")
+    assert response.status_code == 200
