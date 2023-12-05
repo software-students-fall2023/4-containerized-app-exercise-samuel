@@ -45,7 +45,7 @@ def load_class_name():
     Initializes the gesture names and returns the list of gesture names
     """
     with open(
-        "machine_learning_client/mp_hand_gesture/gesture.names", "r", encoding="utf-8"
+        "./mp_hand_gesture/gesture.names", "r", encoding="utf-8"
     ) as file:
         class_names = file.read().split("\n")
     return class_names
@@ -61,14 +61,14 @@ def initialize_hand_tracking():
     return mp_hands, hands, mp_draw
 
 
-def load_gesture_model(model_path="machine_learning_client/mp_hand_gesture"):
+def load_gesture_model(model_path="./mp_hand_gesture"):
     """
     Loads the gesture model from the given path
     """
     return tf.keras.models.load_model(model_path)
 
 
-def load_class_names(file_path="machine_learning_client/mp_hand_gesture/gesture.names"):
+def load_class_names(file_path="./mp_hand_gesture/gesture.names"):
     """
     Loads the class names from the given file path
     """

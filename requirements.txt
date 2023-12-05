@@ -32,6 +32,7 @@ mediapipe==0.8.9.1
 ml-dtypes==0.2.0
 numpy>=1.22
 oauthlib==3.2.2
+Flask-Cors==4.0.0
 opencv-contrib-python==4.8.1.78
 opencv-python==4.8.1.78
 opt-einsum==3.3.0

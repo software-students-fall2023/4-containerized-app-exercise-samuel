@@ -5,7 +5,7 @@ services:
       context: . 
       dockerfile: ./web_app/Dockerfile
     ports:
-      - "8080:5000"
+      - "5002:5002"
     depends_on:
       - mongodb
       - machine_learning_client
@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: ./machine_learning_client/Dockerfile
     ports:
-      - "80:80"
+      - "9090:9090"
     depends_on:
       - mongodb
     environment:
