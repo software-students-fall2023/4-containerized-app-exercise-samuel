@@ -186,12 +186,19 @@ def rock():
     """
     return render_template("rock.html")
 
-@app.route("/tempRoute", methods=["GET"])
-def temp_route():
+@app.route("/secondaryRock", methods=["GET"])
+def secondary_rock():
     """
-    Just a temp funtion to pull a picture of rock
+    Secondary route for redundency
     """
     return render_template("rock.html")
+
+@app.route("/secondarySnail", methods=["GET"])
+def secondary_snail():
+    """
+    Secondary route for redundency 
+    """
+    return render_template("stop.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)

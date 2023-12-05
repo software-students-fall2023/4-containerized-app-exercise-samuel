@@ -126,9 +126,17 @@ def test_gesture_display(client):
     response_followed = client.get(response.location)
     assert response_followed.status_code == 200
 
-def test_temp(client):
+def test_secondary_rock(client):
     """
-    Just a temp function 
+    Testing secondary rock route
     """
-    response = client.get("/tempRoute")
+    response = client.get("/secondaryRock")
     assert response.status_code == 200
+
+def test_secondary_snail(client):
+    """
+    Testing secondary snail route
+    """
+    response = client.get("/secondarySnail")
+    assert response.status_code == 200
+    
