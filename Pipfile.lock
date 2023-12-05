@@ -792,7 +792,7 @@
                 "sha256:f722a5f7d24888559f7334e260cf545a85374d1e4d7b23a2dead4125145c13e1"
             ],
             "index": "pypi",
-            "version": "==0.9.1.0"
+            "version": "==0.9.0.1"
         },
         "mirakuru": {
             "hashes": [
