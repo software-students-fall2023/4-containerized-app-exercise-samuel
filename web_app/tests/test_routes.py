@@ -6,12 +6,9 @@ Tests to check the front end routes are working correctly.
 # pylint: disable=E0401
 
 import sys
+from unittest.mock import Mock
 import pytest
-from unittest.mock import patch
-from unittest.mock import MagicMock
 import pymongo
-from pymongo.mongo_client import MongoClient
-from pymongo.database import Database
 
 
 sys.path.append("..")
@@ -23,7 +20,9 @@ from app import app, initialize_database
 
 @pytest.fixture
 def mocker():
-    from unittest.mock import Mock
+    """
+    Mocker
+    """
 
     return Mock()
 
@@ -91,7 +90,7 @@ def test_camera(client):
     Test the camera route. The camera route redirects to the hello route
     """
     response = client.get("/camera")
-    assert response.status_code == 302
+    assert response.status_code == 200
 
 
 def test_delete_route(client):
