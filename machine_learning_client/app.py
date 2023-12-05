@@ -10,6 +10,10 @@ Gesture Recognition System
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
 # pylint: disable=R1710
+# pylint: disable C0303
+# pylint: disable 103
+
+
 import base64
 import os
 import cv2
