@@ -9,17 +9,20 @@ Gesture Recognition System
 # pylint: disable=W0621
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
-import os
 import cv2
 import pymongo
+import base64
 import mediapipe as mp
 import tensorflow as tf
 import numpy as np
-import certifi
+from io import BytesIO
 from pymongo.mongo_client import MongoClient
-from flask import Flask, Response 
+from flask_cors import CORS
+from flask import Flask, Response, request, jsonify, send_file
 
 app = Flask(__name__)
+
+CORS(app)
 
 
 @app.route("/")
@@ -76,7 +79,6 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
     """
     Processes the frame and returns the frame with the gesture label
     """
-
     x, y, _ = frame.shape
     frame = cv2.flip(frame, 1)
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -123,40 +125,58 @@ def process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connec
 
     return frame
 
-def generate_frames(cap, hands, mp_hands, mp_draw, model, class_names, db_connection):
-    while True:
-        _, frame = cap.read()
-        if frame is None:
-            break
+# Declare global variables
+mp_hands = None
+hands = None
+mp_draw = None
+model = None
+class_names = None
+db_connection = None
 
-        processed_frame = process_frame(
-            frame, hands, mp_hands, mp_draw, model, class_names, db_connection
-        )
+db_connection = initialize_database()
+mp_hands, hands, mp_draw = initialize_hand_tracking()
+model = load_gesture_model()
+class_names = load_class_names()
 
-        _, buffer = cv2.imencode('.jpg', processed_frame)
-        frame_bytes = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-        
+def decode_image_from_json(json_data):
+    try:
+        data = json_data
+        if not data or "image" not in data:
+            return "No image data", 400
+        image_data = data["image"]
+        encoded_data = image_data.split(",")[1]
+        nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        return img
+    except Exception as e:
+        print(f"Error decoding image: {e}")
+        return None
 
-@app.route("/camera")
-def run_ml():
-    cap = cv2.VideoCapture(0)
+def generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection):
+    processed_frame = process_frame(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
+    if(processed_frame is None):
+        return None
+    _, buffer = cv2.imencode('.jpg', processed_frame)
+    frame_bytes = buffer.tobytes()
+    return frame_bytes
 
-    client = MongoClient(
-        os.getenv("MONGO_URI"), serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where()
-    )
-    db_connection = initialize_database()
 
-    if db_connection is None:
-        return
+@app.route("/test", methods=["POST"])
+def test():
+    try: 
+        json_data = request.get_json()
+        if json_data and "image" in json_data:
+            frame = decode_image_from_json(json_data)
+            if(frame is None):
+                return jsonify({"error": "Error decoding image"}), 500
+            frame_bytes = generate_frames_from_json(frame, hands, mp_hands, mp_draw, model, class_names, db_connection)
+            if(frame_bytes is None):
+                return jsonify({"error": "Error processing image"}), 500
+            processed_image_base64 = base64.b64encode(frame_bytes).decode("utf-8")
+            return jsonify({"success": True, "message": "Successfully processed image", "processed_image": processed_image_base64}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-    mp_hands, hands, mp_draw = initialize_hand_tracking()
-    model = load_gesture_model()
-    class_names = load_class_names()
-
-    return Response(generate_frames(cap, hands, mp_hands, mp_draw, model, class_names, db_connection),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5002)
+    app.run(host="0.0.0.0", port=9090, debug=True)
