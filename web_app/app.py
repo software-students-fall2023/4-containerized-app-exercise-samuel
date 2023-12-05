@@ -200,5 +200,12 @@ def secondary_snail():
     """
     return render_template("stop.html")
 
+@app.route("/secondaryChurchil", methods=["GET"])
+def secondary_churchil():
+    """
+    Secondary route for redundency!
+    """
+    return render_template("victory.html")
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=True)
