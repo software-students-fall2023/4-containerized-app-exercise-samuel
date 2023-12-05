@@ -101,7 +101,7 @@ def test_process_frame_with_landmarks(
     mock_mp_draw_param, mock_model_param, mock_db_connection_param
 ):
     """
-    Test the returned frame from the process_frame function
+    Test the returned frame from the process_frame function.
     """
     frame = np.zeros((100, 100, 3), dtype=np.uint8)
     class_names = ["peace", "fist", "stop", "rock", "thumbs up", "thumbs down"]
