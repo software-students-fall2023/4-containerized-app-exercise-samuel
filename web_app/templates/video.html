@@ -56,17 +56,13 @@
       intervalId = setInterval(function() {
         var imageData = captureImage();
         sendImage(imageData);
-      }, 10); // Capture and send image every 1000 milliseconds (1 second)
+      }, 10); 
     }
 
     function stopCapture() {
       clearInterval(intervalId);
-      video.srcObject.getTracks().forEach(track => track.stop()); // Stop the video stream
-      xhr.abort(); // Abort the XHR request
     }
 
-    // Function to display the image
-    // Function to display the image
   function displayResult(data) {
     var resultDiv = document.getElementById("result");
     if (data.message === "Successfully processed image") {
