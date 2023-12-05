@@ -85,19 +85,20 @@ def test_initialize_hand_tracking():
     assert mp_draw is not None
 
 
-def test_load_gesture_model_success(mock_load_model):
+def test_load_gesture_model_success(mock_load_model_param):
     """
     Test the returned gesture model from the load_gesture_model function
     """
     expected_model = Mock()
-    mock_load_model.return_value = expected_model
+    mock_load_model_param.return_value = expected_model
     result = app.load_gesture_model("mock_path")
     assert result == expected_model
-    mock_load_model.assert_called_once_with("mock_path")
+    mock_load_model_param.assert_called_once_with("mock_path")
 
 
 def test_process_frame_with_landmarks(
-    mock_hands, mock_mp_hands, mock_mp_draw, mock_model, mock_db_connection
+    mock_hands_param, mock_mp_hands_param,
+    mock_mp_draw_param, mock_model_param, mock_db_connection_param
 ):
     """
     Test the returned frame from the process_frame function
@@ -110,20 +111,20 @@ def test_process_frame_with_landmarks(
         Mock(x=0.1, y=0.2),
         Mock(x=0.3, y=0.4),
     ]
-    mock_hands.process.return_value = mock_result
+    mock_hands_param.process.return_value = mock_result
     mock_model.predict.return_value = np.array([[0.1, 0.2, 0.3, 0.4, 0.5, 0.6]])
     result_frame = app.process_frame(
         frame,
-        mock_hands,
-        mock_mp_hands,
-        mock_mp_draw,
-        mock_model,
+        mock_hands_param,
+        mock_mp_hands_param,
+        mock_mp_draw_param,
+        mock_model_param,
         class_names,
-        mock_db_connection,
+        mock_db_connection_param,
     )
-    assert mock_hands.process.called_once_with(np.flip(frame, 1))
-    assert mock_mp_draw.draw_landmarks.called_once_with(
-        frame, mock_result.multi_hand_landmarks[0], mock_mp_hands.HAND_CONNECTIONS
+    assert mock_hands_param.process.called_once_with(np.flip(frame, 1))
+    assert mock_mp_draw_param.draw_landmarks.called_once_with(
+        frame, mock_result.multi_hand_landmarks[0], mock_mp_hands_param.HAND_CONNECTIONS
     )
-    assert mock_model.predict.called_once_with([[[10, 20], [30, 40]]])
+    assert mock_model_param.predict.called_once_with([[[10, 20], [30, 40]]])
     assert result_frame is not None
