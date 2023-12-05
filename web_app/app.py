@@ -1,7 +1,7 @@
 """
 Front end web page routes
 """
-# pylint: disable=W29
+
 # pylint: disable=R0911
 # pylint: disable=W0718
 # pylint: disable=W0621
